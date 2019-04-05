@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="AeroSmith"
+            android:layout_marginTop="80dp"
+            style="@style/TextViewStyle" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I Don't Wana Miss A Thing"
+            android:gravity="center"
+            android:textColor="@color/black"/>
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:src="@drawable/dp_placeholder"
+            android:layout_marginTop="40dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_fast_rewind_black_24dp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.25"
+                android:src="@drawable/ic_shuffle_black_24dp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.25"
+                android:src="@drawable/ic_repeat_black_24dp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.25"
+                android:src="@drawable/ic_fast_forward_black_24dp"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Pin to Map"
+            android:id="@+id/btPinToMap"
+            android:textColor="@color/white"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="40dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Set Song"
+            android:id="@+id/btnSetSong"
+            android:textColor="@color/white"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+</layout>

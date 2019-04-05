@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">YourMusicMap</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="label_loading">loading...</string>
+    <string name="label_alert">Alert</string>
+    <string name="tab_text_1">WHATS ON</string>
+    <string name="tab_text_2">HERE&amp;NOW</string>
+    <string name="tab_text_3">EXPLORE</string>
+    <string name="tab_text_4">FAVORITES</string>
+    <string name="tab_text_5">MORE</string>
+    <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="register_here">Register Here</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="error_message_email_invalid">Email is invalid</string>
+    <string name="error_message_enter_missing_detail">Enter the missing details</string>
+    <string name="error_message_password_mismatch">Password mismatch</string>
+    <string name="error_message_email_password_invalid">Email or password is invalid</string>
+
+</resources>

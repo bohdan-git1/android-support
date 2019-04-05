@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:background="@color/bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextViewToobarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Login" />
+
+            <RelativeLayout
+                android:id="@+id/tvSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="94dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textview_background"
+                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:drawableRight="@drawable/ic_mic_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:hint="search song title"
+                    android:padding="6dp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email ID."
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:inputType="textEmailAddress"
+                    android:background="@drawable/textview_background"
+                    android:padding="5dp"
+                    android:id="@+id/etEmail"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:inputType="textPassword"
+                    android:id="@+id/etPassword"
+                    android:background="@drawable/textview_background"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btLogin"
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:text="submit"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:layout_marginTop="50dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            android:layout_above="@+id/tvForgotPassword"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
+                android:gravity="center"
+                android:text="@string/dont_have_an_account"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_here"
+                android:layout_marginLeft="8dp"
+                style="@style/TextViewStyle"
+                android:id="@+id/tvCreateAccount"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:layout_marginLeft="8dp"
+            style="@style/TextViewStyle"
+            android:gravity="center"
+            android:layout_marginTop="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:id="@+id/tvForgotPassword"/>
+
+    </RelativeLayout>
+</layout>

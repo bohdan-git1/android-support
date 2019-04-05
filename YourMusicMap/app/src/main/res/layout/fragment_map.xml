@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:id="@+id/rlMap">
+
+            <FrameLayout
+                android:id="@+id/flMap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/rlToolbar"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:id="@+id/ivBackArrow"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:background="@drawable/rounded_arrow_back"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:padding="6dp"
+                android:layout_alignParentRight="true"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_background"
+                android:drawableLeft="@drawable/ic_search_black_24dp"
+                android:drawableRight="@drawable/ic_mic_black_24dp"
+                android:drawablePadding="6dp"
+                android:hint="search song title"
+                android:padding="5dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_below="@id/ivBackArrow"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
+                android:text="set song"
+                android:textSize="14sp"
+                android:id="@+id/btnSetSong"
+                android:textColor="@color/white"
+                android:background="@drawable/button"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
+                android:text="save location"
+                android:layout_below="@id/btnSetSong"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:background="@drawable/button"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_musical"
+            android:id="@+id/ivMusicIcon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivMusicIcon"
+            android:text="title song"
+            android:id="@+id/tvSongTitle"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+</layout>
