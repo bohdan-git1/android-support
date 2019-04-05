@@ -2,7 +2,6 @@ package com.rapidzz.mymusicmap.datamodel.source
 
 import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.model.responses.*
-import org.w3c.dom.Comment
 
 
 interface UserDataSource{

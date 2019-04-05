@@ -1,7 +1,11 @@
 package com.rapidzz.mymusicmap.view.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import com.facebook.CallbackManager
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.rapidzz.mymusicmap.other.extensions.gotoGlobalNavigationActivity
 import com.rapidzz.mymusicmap.other.extensions.replaceFragmentInActivity
 import com.rapidzz.yourmusicmap.BuildConfig
@@ -19,6 +23,8 @@ class LandingActivity : BaseActivity() {
     }
     var handler: Handler? = null
     var runnable: Runnable? = null
+
+    lateinit var mCallbackManager: CallbackManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +95,12 @@ class LandingActivity : BaseActivity() {
             return fragment
         else
             return LoginFragment()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 /*
     private fun obtainHomeFragment(): HomeFragment {

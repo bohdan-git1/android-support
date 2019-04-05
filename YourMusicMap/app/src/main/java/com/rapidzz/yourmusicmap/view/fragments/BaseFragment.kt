@@ -16,6 +16,12 @@ open class BaseFragment: Fragment(){
 
     lateinit var dialog: AlertDialog
     lateinit var sessionManager: SessionManager
+    internal open lateinit var context : Context
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        this.context = context!!
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (!::dialog.isInitialized) {

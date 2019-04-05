@@ -20,5 +20,17 @@
     <string name="error_message_enter_missing_detail">Enter the missing details</string>
     <string name="error_message_password_mismatch">Password mismatch</string>
     <string name="error_message_email_password_invalid">Email or password is invalid</string>
+    <string name="facebook_app_id">813885215637640</string>
+    <string name="fb_login_protocol_scheme">fb813885215637640</string>
+    <string name="registration">Registration</string>
+    <string name="submit">submit</string>
+    <string name="todo">todo</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+
 
 </resources>

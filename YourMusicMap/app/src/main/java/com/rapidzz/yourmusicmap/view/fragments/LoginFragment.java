@@ -28,21 +28,21 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //replaceFragment = new ReplaceFragmentManger();
+        replaceFragment = new ReplaceFragmentManger();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-      //  binding = FragmentLoginBinding.inflate(inflater);
-        return container;
+        binding = FragmentLoginBinding.inflate(inflater);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.tvCreateAccount.setOnClickListener(this);
+        binding.llCreateAccount.setOnClickListener(this);
         binding.btLogin.setOnClickListener(this);
 
         //((MainActivity)context).binding.rlToolbarMain.setVisibility(View.GONE);
@@ -51,7 +51,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.tvCreateAccount:
+            case R.id.llCreateAccount:
                 replaceFragment.replaceFragment(new SignupFragment(),SignupFragment.TAG,null,context);
                 break;
             case R.id.btLogin:
