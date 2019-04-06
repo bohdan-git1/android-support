@@ -186,7 +186,7 @@
 
         <Button
             android:layout_weight="0"
-            android:id="@+id/bSubmit"
+            android:id="@+id/btSubmit"
             style="@style/SignupBtnTextWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

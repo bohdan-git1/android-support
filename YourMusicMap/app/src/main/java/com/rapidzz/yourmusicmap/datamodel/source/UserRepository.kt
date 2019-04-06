@@ -51,4 +51,28 @@ class UserRepository(ctx: Context) {
             }
         })
     }
+
+    fun signup(name: String, email: String, password: String, phone: String, callback: UserDataSource.RegisterCallback) {
+        val params: HashMap<String, String> = HashMap()
+        params.let {
+            it.put("name", name)
+            it.put("email", email.toLowerCase())
+            it.put("password", password)
+            it.put("phone_no", phone)
+        }
+
+        getApiService().register(params).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    callback.onRegister(response.body()!!)
+                } else {
+                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                callback.onPayloadError(ErrorUtils.parseError(t))
+            }
+        })
+    }
 }

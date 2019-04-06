@@ -2,11 +2,13 @@ package com.rapidzz.yourmusicmap.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.os.Bundle;
 import android.print.PageRange;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -18,10 +20,16 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.rapidzz.mymusicmap.datamodel.model.fan.User;
+import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse;
+import com.rapidzz.mymusicmap.datamodel.source.UserDataSource;
+import com.rapidzz.mymusicmap.datamodel.source.UserRepository;
+import com.rapidzz.yourmusicmap.R;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
-public class SignupViewModel extends AndroidViewModel {
+public class SignupViewModel extends BaseAndroidViewModel {
 
 
     public static final String GOOGLE_REQUEST_ID_TOKEN = "419424438944-tt3qjrffb5vfkofce570fcbb1moscmqa.apps.googleusercontent.com";
@@ -31,11 +39,16 @@ public class SignupViewModel extends AndroidViewModel {
 
     private CallbackManager mCallbackManager;
     private CallbackFacebookLogin mCallbackFacebookLogin;
+    private UserRepository mUserRepository;
 
     private GoogleSignInClient mGoogleSignInClient;
+    //var user: MutableLiveData<User> = MutableLiveData()
+
+    public MutableLiveData<User> mUserMutableLiveData = new MutableLiveData();
 
     public SignupViewModel(@NonNull Application application) {
         super(application);
+        mUserRepository = new UserRepository(application);
     }
 
     public GoogleSignInClient setupGoogleLogin(Context context){
@@ -96,6 +109,32 @@ public class SignupViewModel extends AndroidViewModel {
 
     public void setFacebookLoginCallback(CallbackFacebookLogin mCallbackFacebookLogin){
         this.mCallbackFacebookLogin = mCallbackFacebookLogin;
+    }
+
+    public void signup(String name, String email, String phoneNo, String password){
+
+        if(email.trim().isEmpty() || password.isEmpty())
+            showSnackbarMessage(getString(R.string.error_message_enter_missing_detail));
+        else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()  || password.isEmpty())
+            showSnackbarMessage(getString(R.string.error_message_email_password_invalid));
+        else{
+            showProgressBar(true);
+            mUserRepository.signup(name, email, password, phoneNo, new UserDataSource.RegisterCallback() {
+                @Override
+                public void onRegister(@NotNull User user) {
+                    Log.e("Success",user.toString());
+                    showProgressBar(false);
+                    mUserMutableLiveData.setValue(user);
+                }
+
+                @Override
+                public void onPayloadError(@NotNull ApiErrorResponse error) {
+                    Log.e("Success",error.toString());
+                    showProgressBar(false);
+                    showSnackbarMessage(error.getMessage());
+                }
+            });
+        }
     }
 
     public interface CallbackFacebookLogin{

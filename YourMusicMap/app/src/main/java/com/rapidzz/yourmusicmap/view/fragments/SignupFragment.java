@@ -1,5 +1,6 @@
 package com.rapidzz.yourmusicmap.view.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +25,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.other.extensions.AppExtKt;
+import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.view.activities.LandingActivity;
+import com.rapidzz.mymusicmap.viewmodel.RegisterViewModel;
 import com.rapidzz.yourmusicmap.MainActivity;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentSignupBinding;
+import com.rapidzz.yourmusicmap.other.Event;
+import com.rapidzz.yourmusicmap.other.util.SnackbarUtils;
 import com.rapidzz.yourmusicmap.viewmodel.SignupViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,10 +58,41 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
     SignupViewModel mSignupViewModel;
     FragmentSignupBinding binding;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentSignupBinding.inflate(inflater);
+        init();
+        return binding.getRoot();
+    }
+
     private void init() {
         mSignupViewModel = ViewModelProviders.of(this).get(SignupViewModel.class);
+        mSignupViewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
+            @Override
+            public void onChanged(@Nullable OneShotEvent<String> stringOneShotEvent) {
+              String msg = stringOneShotEvent.getContentIfNotHandled();
+              showAlertDialog(msg);
+
+            }
+        });
+
+        mSignupViewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
+            @Override
+            public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
+               showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
+            }
+        });
+
+        mSignupViewModel.mUserMutableLiveData.observe(this, user -> {
+
+            Log.e("Response",""+user.getFirstName());
+        });
+        // registerViewModel = obtainViewModel(RegisterViewModel::class.java)
 
         mSignupViewModel.setFacebookLoginCallback(this);
+
 
         mGoogleSignInClient = mSignupViewModel.setupGoogleLogin(context);
 
@@ -72,15 +109,13 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
 //        binding.fbLoginBtn.setReadPermissions(Arrays.asList(EMAIL, PUBLIC_PROFILE));
         ((LandingActivity)context).mCallbackManager =
                 mCallbackManager = mSignupViewModel.setupFacebookLogin();
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        binding = FragmentSignupBinding.inflate(inflater);
-        init();
-        return binding.getRoot();
+        binding.btSubmit.setOnClickListener(v -> {
+            mSignupViewModel.signup(binding.etName.getText().toString()
+                    ,binding.etEmail.getText().toString()
+                    ,binding.etMobileNo.getText().toString()
+                    ,binding.etPassword.getText().toString());
+        });
     }
 
     @Override
@@ -122,4 +157,5 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
         binding.etName.setText(personName);
         binding.etEmail.setText(personEmail);
     }
+
 }
