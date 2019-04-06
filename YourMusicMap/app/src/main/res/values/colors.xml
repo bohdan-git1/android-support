@@ -10,5 +10,6 @@
     <color name="blue_dark">#3a589e</color>
     <color name="red">#d9534f</color>
     <color name="bg_transparent">#99e4e4e4</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

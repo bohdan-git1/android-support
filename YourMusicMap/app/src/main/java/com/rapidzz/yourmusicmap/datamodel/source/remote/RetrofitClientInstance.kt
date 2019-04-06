@@ -16,7 +16,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 class RetrofitClientInstance (ctx: Context){
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "http://api.uat.connectonume.com/v1/"
+    private val BASE_URL = "http://192.168.43.173:8000/api/"
     private val httpClient = OkHttpClient.Builder()
     var context: Context
 
@@ -34,7 +34,7 @@ class RetrofitClientInstance (ctx: Context){
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create());
-        val authToken = SessionManager(context).getAuthenticationToken()
+       /* val authToken = SessionManager(context).getAuthenticationToken()
         if (authToken.isNotEmpty()) {
             val interceptor = AuthenticationInterceptor(authToken,context)
             httpClient.addInterceptor(interceptor)
@@ -47,7 +47,7 @@ class RetrofitClientInstance (ctx: Context){
             //
 
             retrofitBuilder.client(httpClient.build())
-        }else{
+        }else{*/
             val interceptor = AuthenticationInterceptor("",context)
             httpClient.addInterceptor(interceptor)
             //Enable Logging
@@ -58,7 +58,7 @@ class RetrofitClientInstance (ctx: Context){
             //
 
             retrofitBuilder.client(httpClient.build())
-        }
+     //   }
 
         retrofit = retrofitBuilder.build()
 

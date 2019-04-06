@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.support.annotation.VisibleForTesting
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository
 import com.rapidzz.mymusicmap.viewmodel.*
+import com.rapidzz.yourmusicmap.viewmodel.LoginViewModel
 
 
 /**
@@ -26,6 +27,9 @@ class ViewModelFactory private constructor(
             when {
                 isAssignableFrom(RegisterViewModel::class.java) ->
                     RegisterViewModel(application, userRepository)
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel(application, userRepository)
+
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }

@@ -9,14 +9,28 @@ object ErrorUtils {
        try {
            val json = JSONObject(json)
            val error = ApiErrorResponse(
-               json.optInt("code", 0),
+               json.optInt("status", 0),
                json.optString("message", ""),
-               json.optString("name", "")
+               json.optString("error", "")
            )
            return error
        }catch (ex: Exception){
            return ApiErrorResponse(0,"","")
        }
+    }
+
+    fun parseErrorFromObject(json: String): ApiErrorResponse {
+        try {
+            val json = JSONObject(json)
+            val error = ApiErrorResponse(
+                    json.optInt("status", 0),
+                    json.optString("message", ""),
+                    json.optString("error", "")
+            )
+            return error
+        }catch (ex: Exception){
+            return ApiErrorResponse(0,"","")
+        }
     }
 
     fun parseError(t: Throwable): ApiErrorResponse {

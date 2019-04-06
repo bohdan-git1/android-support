@@ -20,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.rapidzz.yourmusicmap.MainActivity;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentMapBinding;
 import com.rapidzz.yourmusicmap.other.util.GPSTracker;

@@ -29,12 +29,11 @@ import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.other.extensions.AppExtKt;
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.view.activities.LandingActivity;
-import com.rapidzz.mymusicmap.viewmodel.RegisterViewModel;
-import com.rapidzz.yourmusicmap.MainActivity;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentSignupBinding;
 import com.rapidzz.yourmusicmap.other.Event;
 import com.rapidzz.yourmusicmap.other.util.SnackbarUtils;
+import com.rapidzz.yourmusicmap.viewmodel.LoginViewModel;
 import com.rapidzz.yourmusicmap.viewmodel.SignupViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +57,7 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
     SignupViewModel mSignupViewModel;
     FragmentSignupBinding binding;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -69,31 +69,9 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
 
     private void init() {
         mSignupViewModel = ViewModelProviders.of(this).get(SignupViewModel.class);
-        mSignupViewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
-            @Override
-            public void onChanged(@Nullable OneShotEvent<String> stringOneShotEvent) {
-              String msg = stringOneShotEvent.getContentIfNotHandled();
-              showAlertDialog(msg);
-
-            }
-        });
-
-        mSignupViewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
-            @Override
-            public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
-               showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
-            }
-        });
-
-        mSignupViewModel.mUserMutableLiveData.observe(this, user -> {
-
-            Log.e("Response",""+user.getFirstName());
-        });
-        // registerViewModel = obtainViewModel(RegisterViewModel::class.java)
+        viewModelCallbacks(mSignupViewModel);
 
         mSignupViewModel.setFacebookLoginCallback(this);
-
-
         mGoogleSignInClient = mSignupViewModel.setupGoogleLogin(context);
 
         binding.llFacebook.setOnClickListener(__->{
@@ -148,6 +126,30 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
                 Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
             }
         }
+    }
+
+    public void viewModelCallbacks(SignupViewModel viewModel){
+        viewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
+            @Override
+            public void onChanged(@Nullable OneShotEvent<String> stringOneShotEvent) {
+                String msg = stringOneShotEvent.getContentIfNotHandled();
+                showAlertDialog(msg);
+
+            }
+        });
+
+        viewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
+            @Override
+            public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
+                showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
+            }
+        });
+
+        viewModel.mUserMutableLiveData.observe(this, user -> {
+
+            //Log.e("Response",""+user.getFirstName());
+            //getFragmentManager().popBackStack();
+        });
     }
 
     @Override

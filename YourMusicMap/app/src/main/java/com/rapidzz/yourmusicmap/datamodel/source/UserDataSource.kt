@@ -20,15 +20,6 @@ interface UserDataSource{
         fun onPayloadError(error: ApiErrorResponse)
     }
 
-    interface ForgotPasswordCallback {
-        fun onEmailSent(response: ForgotPasswordResponse?)
-        fun onPayloadError(error: ApiErrorResponse)
-    }
-
-    interface ResetVerficationEmailCallback {
-        fun onEmailSent(response: NoContentResponse)
-        fun onPayloadError(error: ApiErrorResponse)
-    }
 
     interface UpdateProfileCallback{
         fun onProfileUpdated(user: User)

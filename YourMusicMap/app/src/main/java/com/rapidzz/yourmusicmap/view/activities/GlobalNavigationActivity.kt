@@ -118,7 +118,7 @@ open class GlobalNavigationActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         try {
-      //      EventBusFactory.getEventBus().unregister(this)
+
         }catch (ex: Exception){
             ex.printStackTrace()
         }
