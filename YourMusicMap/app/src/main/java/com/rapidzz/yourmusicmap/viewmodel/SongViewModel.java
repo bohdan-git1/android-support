@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.rapidzz.mymusicmap.datamodel.model.fan.Song;
 import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse;
+import com.rapidzz.mymusicmap.datamodel.model.responses.SongResponse;
 import com.rapidzz.mymusicmap.datamodel.source.UserDataSource;
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository;
 import com.rapidzz.yourmusicmap.R;
@@ -31,7 +32,7 @@ public class SetSongViewModel extends BaseAndroidViewModel {
 
 
     private UserRepository mUserRepository;
-    public MutableLiveData<Song> mSongMutableLiveData = new MutableLiveData();
+    public MutableLiveData<SongResponse> mSongMutableLiveData = new MutableLiveData();
 
     public SetSongViewModel(@NonNull Application application) {
         super(application);
@@ -46,10 +47,11 @@ public class SetSongViewModel extends BaseAndroidViewModel {
             showProgressBar(true);
             mUserRepository.saveSong(title, path, id, lat, lng, new UserDataSource.SaveSongCallback() {
                 @Override
-                public void onSaveSong(@NotNull Song song) {
-                    Log.e("Success",song.toString());
+                public void onSaveSong(@NotNull SongResponse response) {
+                    Log.e("Success",response.toString());
                     showProgressBar(false);
-                    mSongMutableLiveData.setValue(song);
+                    showSnackbarMessage(response.getMessage());
+                    mSongMutableLiveData.setValue(response);
                 }
 
                 @Override
@@ -62,22 +64,4 @@ public class SetSongViewModel extends BaseAndroidViewModel {
         }
     }
 
-    public void getPlacesFromApi(String url){
-            showProgressBar(true);
-            mUserRepository.getplace(url, new UserDataSource.PlaceCallback() {
-                @Override
-                public void onPlace(@NotNull Song song) {
-                    Log.e("Success",song.toString());
-                    showProgressBar(false);
-                    mSongMutableLiveData.setValue(song);
-                }
-
-                @Override
-                public void onPayloadError(@NotNull ApiErrorResponse error) {
-                    Log.e("Success",error.toString());
-                    showProgressBar(false);
-                    showSnackbarMessage(error.getMessage());
-                }
-            });
-    }
 }
