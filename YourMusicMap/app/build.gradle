@@ -51,6 +51,8 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-location:$rootProject.gms_services"
     implementation "com.google.android.gms:play-services-places:$rootProject.gms_services"
+    implementation 'com.google.android.libraries.places:places:1.1.0'
+//    implementation 'com.google.android.libraries.places:places:1.0.0'
     implementation "com.google.android.gms:play-services-maps:$rootProject.gms_services"
 
     //Google Open source libraries
@@ -81,6 +83,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+
 
 }
 repositories {

@@ -15,7 +15,7 @@ public class ReplaceFragmentManger {
         f.setArguments(bundle);
         FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,f,TAG);
+        ft.replace(R.id.main_container,f,TAG);
         ft.addToBackStack(TAG);
         ft.commit();
     }

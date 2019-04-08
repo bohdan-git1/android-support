@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory;
+import com.rapidzz.mymusicmap.other.util.SessionManager;
 import com.rapidzz.mymusicmap.view.activities.GlobalNavigationActivity;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentLoginBinding;
@@ -42,22 +44,26 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
         replaceFragment = new ReplaceFragmentManger();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentLoginBinding.inflate(inflater);
-        init();
-        return binding.getRoot();
-    }
+    public void init(){
+        ViewModelFactory factory =
+                ViewModelFactory.Companion.getInstance(getActivity().getApplication());
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        loginViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel.class);
+        viewModelCallbacks(loginViewModel);
 
         binding.llCreateAccount.setOnClickListener(this);
         binding.btLogin.setOnClickListener(this);
 
         //((MainActivity)context).binding.rlToolbarMain.setVisibility(View.GONE);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentLoginBinding.inflate(inflater);
+        init();
+        return binding.getRoot();
     }
 
     @Override
@@ -67,19 +73,13 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
                 replaceFragment.replaceFragment(new SignupFragment(),SignupFragment.TAG,null,context);
                 break;
             case R.id.btLogin:
+
+                hideKeyboard();
                 loginViewModel.login(binding.etEmail.getText().toString()
                         ,binding.etPassword.getText().toString());
                 //replaceFragment.replaceFragment(new MapFragment(),MapFragment.TAG,null,context);
                 break;
         }
-    }
-
-    public void init(){
-        ViewModelFactory factory =
-                ViewModelFactory.Companion.getInstance(getActivity().getApplication());
-
-        loginViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel.class);
-        viewModelCallbacks(loginViewModel);
     }
 
     public void viewModelCallbacks(LoginViewModel viewModel){
@@ -102,10 +102,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
         viewModel.getUser().observe(this, user -> {
 
             Log.e("Response",""+user.getFirstName());
-            startActivity(new Intent(getActivity(), MainActivity.class));
-            //replaceFragment.replaceFragment(new MapFragment(),MapFragment.TAG,null,context);
 
-            //getFragmentManager().popBackStack();
-        });
+            new SessionManager(getActivity()).setUserLoggedIn(true);
+            startActivity(new Intent(getActivity(), MainActivity.class));
+           });
+    }
+
+    public void hideKeyboard(){
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

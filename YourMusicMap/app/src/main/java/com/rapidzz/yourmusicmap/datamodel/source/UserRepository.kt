@@ -4,6 +4,7 @@ import android.content.Context
 import com.rapidzz.mymusicmap.datamodel.model.responses.*
 import com.rapidzz.mymusicmap.datamodel.source.remote.ApiService
 import com.rapidzz.mymusicmap.datamodel.source.remote.RetrofitClientInstance
+import com.rapidzz.yourmusicmap.datamodel.model.PlacesAutoComplete
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +21,6 @@ class UserRepository(ctx: Context) {
     fun getApiService(): ApiService {
         return RetrofitClientInstance.getInstance(context)!!.getService()
     }
-
 
     fun login(email: String, password: String, callback: UserDataSource.LoginCallback) {
         val params: HashMap<String, String> = HashMap()
@@ -51,6 +51,26 @@ class UserRepository(ctx: Context) {
         })
     }
 
+    fun getplace(url: String,callback: UserDataSource.PlaceCallback) {
+
+
+        getApiService().getPlacePredictions(url).enqueue(object : Callback<PlacesAutoComplete> {
+            override fun onResponse(call: Call<PlacesAutoComplete>, response: Response<PlacesAutoComplete>) {
+                if (response.isSuccessful) {
+
+
+                } else {
+                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
+                }
+            }
+
+            override fun onFailure(call: Call<PlacesAutoComplete>, t: Throwable) {
+                callback.onPayloadError(ErrorUtils.parseError(t))
+            }
+        })
+    }
+
+
     fun signup(name: String, email: String, password: String, phone: String, callback: UserDataSource.RegisterCallback) {
         val params: HashMap<String, String> = HashMap()
         params.let {
@@ -76,6 +96,37 @@ class UserRepository(ctx: Context) {
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                callback.onPayloadError(ErrorUtils.parseError(t))
+            }
+        })
+    }
+
+    fun saveSong(title: String, path: String, userId: String, lat: String, lng: String, callback: UserDataSource.SaveSongCallback) {
+        val params: HashMap<String, String> = HashMap()
+        params.let {
+            it.put("title", title)
+            it.put("path", path)
+            it.put("user_id", userId)
+            it.put("lat", lat)
+            it.put("lng", lng)
+        }
+
+        getApiService().addSong(params).enqueue(object : Callback<SongResponse> {
+            override fun onResponse(call: Call<SongResponse>, response: Response<SongResponse>) {
+                if (response.isSuccessful) {
+                    if(response.body()?.error == false)
+                        callback.onSaveSong(response.body()?.song!!)
+                    else
+                        callback.onPayloadError(ApiErrorResponse(
+                                400,
+                                response.body()?.message!!,
+                                ""))
+                } else {
+                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
+                }
+            }
+
+            override fun onFailure(call: Call<SongResponse>, t: Throwable) {
                 callback.onPayloadError(ErrorUtils.parseError(t))
             }
         })

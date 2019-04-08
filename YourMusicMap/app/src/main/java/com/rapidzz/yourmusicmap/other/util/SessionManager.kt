@@ -20,8 +20,16 @@ class SessionManager {
         pref = context?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
+
+    fun setUserLoggedIn(islogin: Boolean){
+        with(pref.edit()) {
+            putBoolean(IS_USER_LOGGED_IN, islogin)
+            commit()
+        }
+    }
+
     fun isLoggedIn(): Boolean {
-        return !getAuthenticationToken().isNullOrEmpty();
+        return pref.getBoolean(IS_USER_LOGGED_IN,false);
     }
 
     fun setAuthenticationToken(token: String) {
@@ -36,16 +44,6 @@ class SessionManager {
         return pref.getString(TOKEN, "")!!
     }
 
-    fun setUserId(id: String) {
-        with(pref.edit()) {
-            putString(USER_ID, id)
-            commit()
-        }
-    }
-
-    fun getUserId(): String {
-        return pref.getString(USER_ID, "")
-    }
 
 
     fun setFirstName(firstName: String?) {
@@ -251,7 +249,6 @@ class SessionManager {
 
     fun logout(){
         setAuthenticationToken("")
-        setUserId("")
         setFirstName("")
         setLastName("")
         setGender("")
@@ -278,7 +275,6 @@ class SessionManager {
 
     fun getUser(): User {
         val user = User()
-        user.id = getUserId()
         user.firstName = getFirstName()
         user.lastName = getLastName()
         user.email = getEmail()
@@ -300,7 +296,6 @@ class SessionManager {
     }
 
     fun setUser(u: User) {
-        setUserId(u.id)
         setFirstName(u.firstName)
         setLastName(u.lastName)
         setGender(u.gender)
@@ -335,7 +330,7 @@ class SessionManager {
     companion object {
         val PREF_NAME: String = "app_pref"
         val TOKEN: String = "authentication_token"
-        val USER_ID: String = "user_id"
+        val IS_USER_LOGGED_IN: String = "is_user_logged_id"
         val FIRST_NAME: String = "first_name"
         val LAST_NAME: String = "last_name"
         val EMAIL: String = "email"

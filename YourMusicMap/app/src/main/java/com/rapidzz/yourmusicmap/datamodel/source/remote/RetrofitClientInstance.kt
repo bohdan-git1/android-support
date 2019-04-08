@@ -16,10 +16,11 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 class RetrofitClientInstance (ctx: Context){
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "http://192.168.43.173:8000/api/"
+
+    // Its my local path, so will not work on your device
+    private val BASE_URL = "http://192.168.100.5:8000/api/"
     private val httpClient = OkHttpClient.Builder()
     var context: Context
-
 
 
     init {

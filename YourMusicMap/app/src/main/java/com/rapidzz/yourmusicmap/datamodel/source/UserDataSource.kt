@@ -1,5 +1,6 @@
 package com.rapidzz.mymusicmap.datamodel.source
 
+import com.rapidzz.mymusicmap.datamodel.model.fan.Song
 import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.model.responses.*
 
@@ -15,14 +16,13 @@ interface UserDataSource{
         fun onPayloadError(error: ApiErrorResponse)
     }
 
-    interface GetUserInformationCallBack{
-        fun onUserReceive(user: User)
+    interface SaveSongCallback {
+        fun onSaveSong(song: Song)
         fun onPayloadError(error: ApiErrorResponse)
     }
 
-
-    interface UpdateProfileCallback{
-        fun onProfileUpdated(user: User)
+    interface PlaceCallback {
+        fun onPlace(song: Song)
         fun onPayloadError(error: ApiErrorResponse)
     }
 

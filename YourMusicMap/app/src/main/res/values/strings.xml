@@ -24,6 +24,7 @@
     <string name="fb_login_protocol_scheme">fb813885215637640</string>
     <string name="registration">Registration</string>
     <string name="submit">submit</string>
+    <string name="add_song">Add Song</string>
     <string name="todo">todo</string>
     <string name="login_with_google">Login with Google</string>
     <string name="name">Name</string>
@@ -31,6 +32,7 @@
     <string name="mobile_no">Mobile No.</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="enter_song">Enter Song Url</string>
 
 
 </resources>

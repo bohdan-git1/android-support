@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory
 import com.rapidzz.mymusicmap.view.activities.GlobalNavigationActivity
 import com.rapidzz.mymusicmap.view.activities.LandingActivity
+import com.rapidzz.yourmusicmap.view.activities.MainActivity
 
 
 /**
@@ -46,17 +47,8 @@ fun FragmentActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int,
 }
 
 fun Activity.gotoGlobalNavigationActivity() {
-    val nextIntent  = Intent(this, GlobalNavigationActivity::class.java)
+    val nextIntent  = Intent(this, MainActivity::class.java)
     nextIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-    if(intent.hasExtra("deeplink")) {
-        var deeplink = intent.getStringExtra("deeplink")
-        if(deeplink.isNotEmpty()) {
-            nextIntent.let {
-                it.action = Intent.ACTION_VIEW
-                it.data = Uri.parse(deeplink)
-            }
-        }
-    }
     startActivity(nextIntent)
     finish()
 }

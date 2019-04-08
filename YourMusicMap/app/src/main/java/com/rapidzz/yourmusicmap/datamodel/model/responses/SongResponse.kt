@@ -1,6 +1,7 @@
 package com.rapidzz.mymusicmap.datamodel.model.responses
 
 import com.google.gson.annotations.SerializedName
+import com.rapidzz.mymusicmap.datamodel.model.fan.Song
 import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import java.io.Serializable
 
@@ -13,5 +14,5 @@ class SongResponse : Serializable {
         @SerializedName("error")
         val error: Boolean = false
         @SerializedName("data")
-        val user: User? = null
+        val song: Song? = null
 }

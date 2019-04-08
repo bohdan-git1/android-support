@@ -58,24 +58,43 @@
             android:layout_marginBottom="40dp"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp">
+
+            <EditText
+                android:id="@+id/etSongUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:textColorHint="@color/black"
+                android:textSize="14dp"
+                android:hint="@string/enter_song"
+                android:layout_marginBottom="100dp"
+                android:visibility="gone"
+                android:background="@drawable/view_border"/>
+
             <Button
+                android:id="@+id/btnSetSong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextViewStyle"
                 android:text="set song"
                 android:textSize="14sp"
-                android:id="@+id/btnSetSong"
+                android:layout_below="@id/etSongUrl"
                 android:textColor="@color/white"
                 android:background="@drawable/button"/>
             <Button
+                android:id="@+id/btnSaveLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextViewStyle"
-                android:text="save location"
+                android:text="Song Listing"
                 android:layout_below="@id/btnSetSong"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
                 android:textColor="@color/white"
+                android:visibility="visible"
                 android:background="@drawable/button"/>
         </RelativeLayout>
     </RelativeLayout>

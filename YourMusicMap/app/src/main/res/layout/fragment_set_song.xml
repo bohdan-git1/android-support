@@ -3,154 +3,162 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/colorPrimary">
 
-            <TextView
-                style="@style/TitleTextStyle"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/login" />
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Set Song"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"/>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appbar"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="80dp"
-                android:orientation="horizontal"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:baselineAligned="false">
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:weightSum="2">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="bottom">
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.2"/>
 
-                    <TextView
-                        style="@style/TextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="Email ID."
-                        android:gravity="center_vertical"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        style="@style/TextViewStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:text="Password"
-                        android:textSize="16sp"
-                        android:layout_marginTop="18dp"
-                        android:gravity="center_vertical"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    tools:ignore="RtlSymmetry">
+                    android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/tvSearch"
+                    <LinearLayout
+                        android:id="@+id/lnSongTitle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="Song Title"
+                            android:textSize="16sp"/>
 
                         <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/etSongTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/textview_background"
-                            android:drawableStart="@drawable/ic_search_black_24dp"
-                            android:drawableEnd="@drawable/ic_mic_black_24dp"
-                            android:drawablePadding="5dp"
-                            android:inputType="text"
-                            android:hint="search song title"
-                            android:padding="8dp" />
-                    </RelativeLayout>
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"/>
 
-                    <EditText
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lnSongUrl"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:inputType="textEmailAddress"
-                        android:background="@drawable/textview_background"
-                        android:padding="5dp"
-                        android:id="@+id/etEmail"
-                        android:layout_marginTop="60dp"/>
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lnSongTitle"
+                        android:layout_marginTop="40dp"
+                        android:orientation="horizontal">
 
-                    <EditText
+                        <TextView
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="Song Url:  "
+                            android:textSize="16sp"/>
+
+                        <EditText
+                            android:id="@+id/etSongUrl"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/textview_background"
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btSaveSong"
+                        style="@style/SignupBtnTextWhite"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:inputType="textPassword"
-                        android:id="@+id/etPassword"
-                        android:background="@drawable/textview_background"
-                        android:padding="5dp"
-                        android:layout_marginTop="18dp"/>
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lnSongUrl"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginRight="80dp"
+                        android:layout_marginBottom="50dp"
+                        android:background="@drawable/button"
+                        android:text="@string/add_song"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btLogin"
-                style="@style/SignupBtnTextWhite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button"
-                android:text="@string/submit"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:layout_marginLeft="80dp"
-                android:layout_marginRight="80dp"
-                android:layout_marginTop="50dp"/>
-
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/llCreateAccount"
-            android:layout_width="wrap_content"
+        <com.rapidzz.yourmusicmap.other.util.LocationAutoCompleteTextView
+            android:id="@+id/actvPlaces"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_below="@+id/appbar"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/view_border"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:hint="Search location"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextViewStyle"
-                android:gravity="center"
-                android:text="@string/dont_have_an_account"/>
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/register_here"
-                android:layout_marginStart="8dp"
-                style="@style/TextViewStyle"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/forgot_password"
-            style="@style/TextViewStyle"
-            android:gravity="center"
-            android:layout_marginTop="40dp"/>
-
-    </LinearLayout>
 </layout>
