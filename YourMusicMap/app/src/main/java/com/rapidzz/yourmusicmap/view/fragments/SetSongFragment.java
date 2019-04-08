@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentMapBinding;
+import com.rapidzz.yourmusicmap.databinding.FragmentSetSongBinding;
 import com.rapidzz.yourmusicmap.other.util.GPSTracker;
 import com.rapidzz.yourmusicmap.other.util.Permission;
 import com.rapidzz.yourmusicmap.other.util.RxBus;
@@ -35,7 +36,7 @@ import io.reactivex.functions.Consumer;
 public class SetSongFragment extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
     public static final String TAG = SetSongFragment.class.getSimpleName();
     private Context context;
-    FragmentMapBinding binding;
+    FragmentSetSongBinding binding;
 
     SupportMapFragment mapFragment;
     GoogleMap mMap;
