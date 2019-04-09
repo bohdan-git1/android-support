@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <LinearLayout
@@ -12,6 +13,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="AeroSmith"
+            android:id="@+id/tvSongTitle"
             android:layout_marginTop="80dp"
             style="@style/TextViewStyle" />
         <TextView
@@ -19,13 +21,42 @@
             android:layout_height="wrap_content"
             android:text="I Don't Wana Miss A Thing"
             android:gravity="center"
+            android:id="@+id/tvSong"
+            android:maxLines="1"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textColor="@color/black"/>
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="220dp"
-            android:layout_gravity="center"
-            android:src="@drawable/dp_placeholder"
-            android:layout_marginTop="40dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="40dp">
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                app:cs_negative_enabled="true"
+                app:cs_circle_style="butt"
+                android:padding="20dp"
+                app:cs_circle_stroke_width="2dp"
+                app:cs_pointer_stroke_width="2dp" />
+            <!--/>-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:layout_alignTop="@id/seek_bar"
+                android:layout_alignBottom="@id/seek_bar"
+                android:layout_alignStart="@id/seek_bar"
+                android:layout_alignEnd="@id/seek_bar"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/dp_placeholder" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,6 +86,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_weight="0.25"
+                android:id="@+id/ivNextSong"
                 android:src="@drawable/ic_fast_forward_black_24dp"/>
         </LinearLayout>
 

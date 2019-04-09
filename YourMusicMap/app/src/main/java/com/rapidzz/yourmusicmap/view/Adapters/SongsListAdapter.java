@@ -1,6 +1,7 @@
 package com.rapidzz.yourmusicmap.view.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,11 +52,16 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.View
         public void bind(int pos) {
             binding.tvSongTitle.setText(songs.get(pos).getTitle());
 
-            binding.tvSongTitle.setOnClickListener(new View.OnClickListener() {
+            binding.llMusicList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ReplaceFragmentManger replaceFragment = new ReplaceFragmentManger();
-                    replaceFragment.replaceFragment(new PlaySongsFragment(),PlaySongsFragment.TAG,null,context);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Songs",songs.get(pos));
+                    bundle.putSerializable("SongsList",songs);
+                    bundle.putInt("index",pos);
+                    replaceFragment.replaceFragment(new PlaySongsFragment(),PlaySongsFragment.TAG,bundle,context);
                 }
             });
         }

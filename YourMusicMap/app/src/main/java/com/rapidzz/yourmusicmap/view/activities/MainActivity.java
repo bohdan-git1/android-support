@@ -343,4 +343,10 @@ public class MainActivity extends AppCompatActivity
 
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
 }

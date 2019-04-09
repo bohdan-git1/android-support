@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -214,6 +215,8 @@ public class SetSongFragment extends BaseFragment implements OnMapReadyCallback,
     }
 
 
+
+
     private void initMap() {
         try {
             FragmentManager fmanager = ((AppCompatActivity) context).getSupportFragmentManager();
@@ -277,14 +280,42 @@ public class SetSongFragment extends BaseFragment implements OnMapReadyCallback,
                 Uri uri = data.getData();
                 try {
                     String uriString = uri.toString();
-                    File myFile = new File(uriString);
-                    String displayName = null;
+                    String songURl = null;
                     String path = getAudioPath(uri);
+                    File myFile = new File(path);
+                    songURl = myFile.getName();
+
+
+                    Log.e("Name",songURl);
+                    String songTitle = getArtistName(path);
+
+                    if (songTitle == null) {
+                        binding.etSongTitle.setText("unknown title");
+                    }else {
+                        binding.etSongTitle.setText(songTitle);
+                    }
+
+                    binding.etSongUrl.setText(path);
+
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Toast.makeText(context, "Unable to process,try again", Toast.LENGTH_SHORT).show();
                 }
             }
         }
+    }
+
+    private String getArtistName(String myFile) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource(myFile);
+        String artist =  metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        String title = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+
+//        Log.e("artist",artist);
+//        Log.e("title",titlele);
+
+        return title;
     }
 
 
@@ -300,7 +331,7 @@ public class SetSongFragment extends BaseFragment implements OnMapReadyCallback,
 
     private void pickAudio(){
         Intent audioIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(audioIntent, "Select Audio"), REQUEST_CODE);
+        getActivity().startActivityForResult(Intent.createChooser(audioIntent, "Select Audio"), REQUEST_CODE);
     }
 
     @Override
@@ -316,4 +347,5 @@ public class SetSongFragment extends BaseFragment implements OnMapReadyCallback,
         if (mGoogleApiClient != null)
             mGoogleApiClient.disconnect();
     }
+
 }

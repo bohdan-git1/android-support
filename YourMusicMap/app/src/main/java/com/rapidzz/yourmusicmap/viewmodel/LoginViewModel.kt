@@ -8,7 +8,6 @@ import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse
 import com.rapidzz.mymusicmap.datamodel.source.UserDataSource
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository
-import com.rapidzz.mymusicmap.other.util.SessionManager
 import com.rapidzz.yourmusicmap.R
 
 
@@ -44,4 +43,21 @@ class LoginViewModel(context: Application, private val userRepository: UserRepos
                 })
             }
     }
+
+    fun uploadMedia(userId: String, filePath: String) {
+
+        userRepository.uploadMedia(userId,filePath, object : UserDataSource.LoginCallback {
+            override fun onLogin(user: User) {
+                showProgressBar(false)
+                mUser.value = user;
+            }
+
+            override fun onPayloadError(error: ApiErrorResponse) {
+                showProgressBar(false)
+                showSnackbarMessage(error.message)
+            }
+        })
+    }
+
+
 }

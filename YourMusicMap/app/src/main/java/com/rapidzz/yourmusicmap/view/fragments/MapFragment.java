@@ -167,7 +167,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
         }else  if(v == binding.btnSongListing){
 
             Bundle bundle = new Bundle();
-
             replaceFragment.replaceFragment(new SongsFragment(),SetSongFragment.TAG,bundle,getActivity());
             //binding.etSongUrl.setVisibility(View.VISIBLE);
         }

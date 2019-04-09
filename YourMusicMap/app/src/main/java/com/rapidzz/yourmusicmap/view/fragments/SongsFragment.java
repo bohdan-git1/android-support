@@ -53,13 +53,13 @@ public class SongsFragment extends BaseFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         setInfo();
         getInfo();
-
     }
 
     private void getInfo() {
-        String id =  new SessionManager(getActivity()).getUserId();
+        String id =  new SessionManager(context).getUserId();
         viewModel.getSongs(id,true);
     }
 
@@ -101,6 +101,4 @@ public class SongsFragment extends BaseFragment{
             //getFragmentManager().popBackStack();
         });
     }
-
-
 }

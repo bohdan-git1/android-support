@@ -1,13 +1,18 @@
 package com.rapidzz.mymusicmap.datamodel.source
 
 import android.content.Context
+import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.model.responses.*
 import com.rapidzz.mymusicmap.datamodel.source.remote.ApiService
 import com.rapidzz.mymusicmap.datamodel.source.remote.RetrofitClientInstance
 import com.rapidzz.yourmusicmap.datamodel.model.PlacesAutoComplete
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import kotlin.collections.HashMap
 
 
@@ -135,6 +140,27 @@ class UserRepository(ctx: Context) {
             }
 
             override fun onFailure(call: Call<SongListingResponse>, t: Throwable) {
+                callback.onPayloadError(ErrorUtils.parseError(t))
+            }
+        })
+    }
+
+    fun uploadMedia(userId: String, filePath: String, callback: UserDataSource.LoginCallback) {
+        val MEDIA_TYPE_PNG = MediaType.parse("image/jpeg")
+        val file = File(filePath)
+        val requestBody = RequestBody.create(MEDIA_TYPE_PNG, file)
+        val body = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        getApiService().uploadMedia(userId,body).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    callback.onLogin(response.body()!!)
+                } else {
+                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 callback.onPayloadError(ErrorUtils.parseError(t))
             }
         })
