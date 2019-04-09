@@ -14,5 +14,5 @@ class SongListingResponse : Serializable {
         @SerializedName("error")
         val error: Boolean = false
         @SerializedName("data")
-        val song: Song? = null
+        val songs: ArrayList<Song>? = null
 }

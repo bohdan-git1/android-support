@@ -53,6 +53,13 @@ class SessionManager {
         }
     }
 
+    fun setUserId(id: String?) {
+        with(pref.edit()) {
+            putString(USER_ID, id)
+            commit()
+        }
+    }
+
     fun getFirstName(): String {
         return pref.getString(FIRST_NAME, "")!!
     }
@@ -90,6 +97,10 @@ class SessionManager {
 
     fun getPhone(): String {
         return pref.getString(PHONE, "")
+    }
+
+    fun getUserId(): String {
+        return pref.getString(USER_ID, "")
     }
 
     fun getGender(): String {
@@ -275,34 +286,19 @@ class SessionManager {
 
     fun getUser(): User {
         val user = User()
-        user.firstName = getFirstName()
-        user.lastName = getLastName()
+        user.name = getFirstName()
         user.email = getEmail()
         user.phone = getPhone()
-        user.gender = getGender()
-        user.age = getAge()
-        user.invisible = getInvisible()
-
-       /* if(!getProfileImage().isNullOrEmpty()){
-            val profilePicture = Media()
-            profilePicture.id = ""
-            profilePicture.location = getProfileImage()
-            user.profilePicture = profilePicture
-        }*/
-
-       // user.shippingAddress = Address(getAddressLine1(),getAddressLine2(),getCity(),getCountry(),getStateRegionProvince(),getZip())
+        user.id = getUserId()
 
         return user
     }
 
     fun setUser(u: User) {
-        setFirstName(u.firstName)
-        setLastName(u.lastName)
-        setGender(u.gender)
-        setAge(u.age)
+        setUserId(u.id)
+        setFirstName(u.name)
         setEmail(u.email)
         setPhone(u.phone)
-        setInvisible(u.invisible)
 
        /* if(u.shippingAddress != null){
             setAddressLine1(u.shippingAddress!!.address1)
@@ -332,6 +328,7 @@ class SessionManager {
         val TOKEN: String = "authentication_token"
         val IS_USER_LOGGED_IN: String = "is_user_logged_id"
         val FIRST_NAME: String = "first_name"
+        val USER_ID: String = "user_id"
         val LAST_NAME: String = "last_name"
         val EMAIL: String = "email"
         val PHONE: String = "phone"

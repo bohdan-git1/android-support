@@ -43,6 +43,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     SupportMapFragment mapFragment;
     GoogleMap mMap;
     GPSTracker gpsTracker;
+    Location location;
 
     @Override
     public void onAttach(Context context) {
@@ -81,7 +82,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
 
     public void init(){
         binding.btnSetSong.setOnClickListener(this);
-        binding.btnSaveLocation.setOnClickListener(this);
+        binding.btnSongListing.setOnClickListener(this);
 
     }
     private void initMap() {
@@ -106,12 +107,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
         CameraPosition camPos = new CameraPosition.Builder().
                 target(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude())).zoom(14.2f).build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-        MarkerOptions marker = new MarkerOptions().position(
-                new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()));
-
-        mMap.getUiSettings().setTiltGesturesEnabled(true);
+         mMap.getUiSettings().setTiltGesturesEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.addMarker(marker).showInfoWindow();
         mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
@@ -147,7 +144,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
 
                         if (event instanceof LocationResult) {
                             LocationResult locationResult = (LocationResult) event;
-                            Location location = locationResult.getLastLocation();
+                             location = locationResult.getLastLocation();
                             if (mMap != null)
                                 zoomMap(location);
                         }
@@ -159,8 +156,21 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Vie
     @Override
     public void onClick(View v) {
         if(v == binding.btnSetSong){
-            replaceFragment.replaceFragment(new SetSongFragment(),SetSongFragment.TAG,null,getActivity());
+
+            Bundle bundle = new Bundle();
+            if(location != null) {
+                bundle.putDouble("lat",location.getLatitude() );
+                bundle.putDouble("lng",location.getLongitude() );
+            }
+            replaceFragment.replaceFragment(new SetSongFragment(),SetSongFragment.TAG,bundle,getActivity());
+            //binding.etSongUrl.setVisibility(View.VISIBLE);
+        }else  if(v == binding.btnSongListing){
+
+            Bundle bundle = new Bundle();
+
+            replaceFragment.replaceFragment(new SongsFragment(),SetSongFragment.TAG,bundle,getActivity());
             //binding.etSongUrl.setVisibility(View.VISIBLE);
         }
+
     }
 }

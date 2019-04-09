@@ -51,26 +51,6 @@ class UserRepository(ctx: Context) {
         })
     }
 
-    fun getplace(url: String,callback: UserDataSource.PlaceCallback) {
-
-
-        getApiService().getPlacePredictions(url).enqueue(object : Callback<PlacesAutoComplete> {
-            override fun onResponse(call: Call<PlacesAutoComplete>, response: Response<PlacesAutoComplete>) {
-                if (response.isSuccessful) {
-
-
-                } else {
-                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
-                }
-            }
-
-            override fun onFailure(call: Call<PlacesAutoComplete>, t: Throwable) {
-                callback.onPayloadError(ErrorUtils.parseError(t))
-            }
-        })
-    }
-
-
     fun signup(name: String, email: String, password: String, phone: String, callback: UserDataSource.RegisterCallback) {
         val params: HashMap<String, String> = HashMap()
         params.let {
@@ -115,7 +95,7 @@ class UserRepository(ctx: Context) {
             override fun onResponse(call: Call<SongResponse>, response: Response<SongResponse>) {
                 if (response.isSuccessful) {
                     if(response.body()?.error == false)
-                        callback.onSaveSong(response.body()?.song!!)
+                        callback.onSaveSong(response.body()!!)
                     else
                         callback.onPayloadError(ApiErrorResponse(
                                 400,
@@ -127,6 +107,34 @@ class UserRepository(ctx: Context) {
             }
 
             override fun onFailure(call: Call<SongResponse>, t: Throwable) {
+                callback.onPayloadError(ErrorUtils.parseError(t))
+            }
+        })
+    }
+
+    fun getSongListing( userId: String, callback: UserDataSource.GetSongCallback) {
+        val params: HashMap<String, String> = HashMap()
+        params.let {
+
+            it.put("user_id", userId)
+          }
+
+        getApiService().getSongListing(params).enqueue(object : Callback<SongListingResponse> {
+            override fun onResponse(call: Call<SongListingResponse>, response: Response<SongListingResponse>) {
+                if (response.isSuccessful) {
+                    if(response.body()?.error == false)
+                        callback.onSongListing(response.body()!!)
+                    else
+                        callback.onPayloadError(ApiErrorResponse(
+                                400,
+                                response.body()?.message!!,
+                                ""))
+                } else {
+                    callback.onPayloadError(ErrorUtils.parseError(response.errorBody()!!.string()))
+                }
+            }
+
+            override fun onFailure(call: Call<SongListingResponse>, t: Throwable) {
                 callback.onPayloadError(ErrorUtils.parseError(t))
             }
         })

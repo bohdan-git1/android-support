@@ -17,7 +17,12 @@ interface UserDataSource{
     }
 
     interface SaveSongCallback {
-        fun onSaveSong(song: Song)
+        fun onSaveSong(response: SongResponse)
+        fun onPayloadError(error: ApiErrorResponse)
+    }
+
+    interface GetSongCallback {
+        fun onSongListing(response: SongListingResponse)
         fun onPayloadError(error: ApiErrorResponse)
     }
 

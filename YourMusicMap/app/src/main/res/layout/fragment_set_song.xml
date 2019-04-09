@@ -48,12 +48,12 @@
                 android:orientation="vertical"
                 android:weightSum="2">
 
-                <fragment
-                    android:id="@+id/map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                <FrameLayout
+                    android:id="@+id/flMap"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1.2"/>
+                    android:layout_weight="1"/>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
 
                         <EditText
                             android:id="@+id/etSongTitle"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
@@ -89,6 +89,7 @@
                             android:background="@drawable/textview_background"
                             android:inputType="textEmailAddress"
                             android:padding="5dp"/>
+
 
                     </LinearLayout>
 
@@ -108,16 +109,34 @@
                             android:text="Song Url:  "
                             android:textSize="16sp"/>
 
-                        <EditText
-                            android:id="@+id/etSongUrl"
+
+                        <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/textview_background"
-                            android:inputType="textEmailAddress"
-                            android:padding="5dp"/>
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/etSongUrl"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/textview_background"
+                                android:inputType="textEmailAddress"
+                                android:padding="5dp"/>
+
+
+                            <ImageView
+                                android:id="@+id/ivMpsong"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="20dp"
+                                android:src="@drawable/ic_song"/>
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -142,7 +161,7 @@
 
         </LinearLayout>
 
-        <com.rapidzz.yourmusicmap.other.util.LocationAutoCompleteTextView
+        <AutoCompleteTextView
             android:id="@+id/actvPlaces"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

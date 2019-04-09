@@ -57,7 +57,7 @@ open class BaseActivity : AppCompatActivity() {
         if(clearStack)
             supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
         var ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.fragment_container,fragment,tag)
+        ft.replace(R.id.main_container,fragment,tag)
         if(addToStack)
             ft.addToBackStack(tag)
         ft.commit()

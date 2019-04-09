@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.rapidzz.mymusicmap.datamodel.model.fan.Song;
 import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse;
+import com.rapidzz.mymusicmap.datamodel.model.responses.SongListingResponse;
 import com.rapidzz.mymusicmap.datamodel.model.responses.SongResponse;
 import com.rapidzz.mymusicmap.datamodel.source.UserDataSource;
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository;
@@ -28,27 +29,30 @@ import com.rapidzz.yourmusicmap.R;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
-public class SetSongViewModel extends BaseAndroidViewModel {
+import java.util.ArrayList;
+
+public class SongViewModel extends BaseAndroidViewModel {
 
 
     private UserRepository mUserRepository;
     public MutableLiveData<SongResponse> mSongMutableLiveData = new MutableLiveData();
+    public MutableLiveData<ArrayList<Song>> mSongListingResponseMutableLiveData = new MutableLiveData();
 
-    public SetSongViewModel(@NonNull Application application) {
+    public SongViewModel(@NonNull Application application) {
         super(application);
         mUserRepository = new UserRepository(application);
     }
 
-    public void doSaveSong(String title, String path, String id, String lat, String lng){
+    public void doSaveSong(String title, String path, String id, String lat, String lng) {
 
-        if(title.trim().isEmpty() || path.isEmpty() || lat.isEmpty() || lng.isEmpty())
+        if (title.trim().isEmpty() || path.isEmpty() || lat.isEmpty() || lng.isEmpty())
             showSnackbarMessage(getString(R.string.error_message_enter_missing_detail));
-        else{
+        else {
             showProgressBar(true);
             mUserRepository.saveSong(title, path, id, lat, lng, new UserDataSource.SaveSongCallback() {
                 @Override
                 public void onSaveSong(@NotNull SongResponse response) {
-                    Log.e("Success",response.toString());
+                    Log.e("Success", response.toString());
                     showProgressBar(false);
                     showSnackbarMessage(response.getMessage());
                     mSongMutableLiveData.setValue(response);
@@ -56,12 +60,33 @@ public class SetSongViewModel extends BaseAndroidViewModel {
 
                 @Override
                 public void onPayloadError(@NotNull ApiErrorResponse error) {
-                    Log.e("Success",error.toString());
+                    Log.e("Success", error.toString());
                     showProgressBar(false);
                     showSnackbarMessage(error.getMessage());
                 }
             });
         }
+    }
+
+    public void getSongs(String userId, Boolean doShow) {
+
+        //if (doShow )
+            showProgressBar(doShow);
+        mUserRepository.getSongListing(userId, new UserDataSource.GetSongCallback() {
+            @Override
+            public void onSongListing(@NotNull SongListingResponse response) {
+                Log.e("Success", response.toString());
+                showProgressBar(false);
+                mSongListingResponseMutableLiveData.setValue(response.getSongs());
+            }
+
+            @Override
+            public void onPayloadError(@NotNull ApiErrorResponse error) {
+                Log.e("Success", error.toString());
+                showProgressBar(false);
+                showSnackbarMessage(error.getMessage());
+            }
+        });
     }
 
 }

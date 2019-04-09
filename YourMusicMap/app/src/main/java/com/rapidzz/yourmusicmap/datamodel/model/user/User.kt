@@ -5,20 +5,14 @@ import java.io.Serializable
 class User : Serializable {
     @SerializedName("id")
     var id: String = ""
-    @SerializedName("firstName")
-    var firstName: String = ""
-    @SerializedName("lastName")
-    var lastName: String? = ""
+    @SerializedName("name")
+    var name: String = ""
     @SerializedName("email")
     var email: String = ""
     @SerializedName("phone")
     var phone: String? = ""
-    @SerializedName("gender")
-    var gender: String? = ""
-    @SerializedName("age")
-    var age: Int = 0
-    @SerializedName("invisible")
-    var invisible: Boolean = false
+    @SerializedName("image")
+    var image: String? = ""
     @SerializedName("status")
     var status: String? = null
 

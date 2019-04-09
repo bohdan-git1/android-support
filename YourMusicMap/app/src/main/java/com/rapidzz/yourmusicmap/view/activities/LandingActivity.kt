@@ -48,14 +48,14 @@ class LandingActivity : BaseActivity() {
                 //replaceFragmentInActivity(obtainLoginFragment(), R.id.fragment_container, true, false)
             }
         }else{
-            replaceFragmentInActivity(obtainSplashFragment(), R.id.fragment_container, true, false);
+            replaceFragmentInActivity(obtainSplashFragment(), R.id.main_container, true, false);
             handler = Handler()
             runnable = Runnable {
                 if (sessionManager.isLoggedIn()) {
                     //replaceFragmentInActivity(obtainHomeFragment(), R.id.fragment_container, true, false)
                     gotoGlobalNavigationActivity()
                 } else {
-                    replaceFragmentInActivity(obtainLoginFragment(), R.id.fragment_container, true, false)
+                    replaceFragmentInActivity(obtainLoginFragment(), R.id.main_container, true, false)
                 }
             }
             handler!!.postDelayed(runnable, SPLASH_DELAY)
@@ -63,7 +63,7 @@ class LandingActivity : BaseActivity() {
     }
 
     fun isSplashRunning(): Boolean{
-        var fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        var fragment = supportFragmentManager.findFragmentById(R.id.main_container)
         return (fragment  != null && fragment is SplashFragment)
     }
 
@@ -82,7 +82,7 @@ class LandingActivity : BaseActivity() {
     }
 
     private fun obtainSplashFragment(): SplashFragment {
-        var fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        var fragment = supportFragmentManager.findFragmentById(R.id.main_container)
         if(fragment  != null && fragment is SplashFragment)
             return fragment
         else
@@ -90,7 +90,7 @@ class LandingActivity : BaseActivity() {
     }
 
     private fun obtainLoginFragment(): LoginFragment {
-        var fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        var fragment = supportFragmentManager.findFragmentById(R.id.main_container)
         if(fragment  != null && fragment is LoginFragment)
             return fragment
         else

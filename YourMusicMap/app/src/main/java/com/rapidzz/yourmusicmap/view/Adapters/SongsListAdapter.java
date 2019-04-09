@@ -8,18 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.rapidzz.mymusicmap.datamodel.model.fan.Song;
 import com.rapidzz.yourmusicmap.databinding.RvSongsBinding;
 import com.rapidzz.yourmusicmap.other.util.ReplaceFragmentManger;
 import com.rapidzz.yourmusicmap.view.fragments.PlaySongsFragment;
-import com.rapidzz.yourmusicmap.viewmodel.Songs;
 
 import java.util.ArrayList;
 
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<Songs> songs;
+    private ArrayList<Song> songs;
 
-    public SongsListAdapter(Context context, ArrayList<Songs> songs) {
+    public SongsListAdapter(Context context, ArrayList<Song> songs) {
         this.context = context;
         this.songs = songs;
     }

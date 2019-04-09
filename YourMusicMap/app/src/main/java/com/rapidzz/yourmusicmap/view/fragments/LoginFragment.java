@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory;
 import com.rapidzz.mymusicmap.other.util.SessionManager;
@@ -95,15 +96,16 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
         viewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
             @Override
             public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
-                showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
+                showProgressDialog(false);
             }
         });
 
         viewModel.getUser().observe(this, user -> {
 
-            Log.e("Response",""+user.getFirstName());
+            Log.e("Response",""+user.getName());
 
             new SessionManager(getActivity()).setUserLoggedIn(true);
+            new SessionManager(getActivity()).setUser(user);
             startActivity(new Intent(getActivity(), MainActivity.class));
            });
     }
