@@ -1,42 +1,31 @@
 package com.rapidzz.yourmusicmap.view.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.rapidzz.mymusicmap.datamodel.model.fan.User;
-import com.rapidzz.mymusicmap.other.extensions.AppExtKt;
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
+import com.rapidzz.mymusicmap.other.util.SessionManager;
 import com.rapidzz.mymusicmap.view.activities.LandingActivity;
-import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentSignupBinding;
-import com.rapidzz.yourmusicmap.other.Event;
-import com.rapidzz.yourmusicmap.other.util.SnackbarUtils;
-import com.rapidzz.yourmusicmap.viewmodel.LoginViewModel;
 import com.rapidzz.yourmusicmap.viewmodel.SignupViewModel;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -129,7 +118,7 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
     }
 
     public void viewModelCallbacks(SignupViewModel viewModel){
-        viewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
+        viewModel.getSnackbarMessage().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<String>>() {
             @Override
             public void onChanged(@Nullable OneShotEvent<String> stringOneShotEvent) {
                 String msg = stringOneShotEvent.getContentIfNotHandled();
@@ -138,15 +127,17 @@ public class SignupFragment extends BaseFragment implements SignupViewModel.Call
             }
         });
 
-        viewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
+        viewModel.getProgressBar().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<Boolean>>() {
             @Override
             public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
                 showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
             }
         });
 
-        viewModel.mUserMutableLiveData.observe(this, user -> {
+        viewModel.mUserMutableLiveData.observe(getViewLifecycleOwner(), userResponse -> {
 
+            showSuccessDialog(userResponse.getMessage(),"signup");
+            new SessionManager(getActivity()).setUser(userResponse.getUser());
             //Log.e("Response",""+user.getFirstName());
             //getFragmentManager().popBackStack();
         });

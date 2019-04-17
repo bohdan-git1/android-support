@@ -1,12 +1,12 @@
 package com.rapidzz.yourmusicmap.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.os.Bundle;
-import android.print.PageRange;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -14,7 +14,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -22,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse;
+import com.rapidzz.mymusicmap.datamodel.model.responses.UserResponse;
 import com.rapidzz.mymusicmap.datamodel.source.UserDataSource;
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository;
 import com.rapidzz.yourmusicmap.R;
@@ -44,7 +44,7 @@ public class SignupViewModel extends BaseAndroidViewModel {
     private GoogleSignInClient mGoogleSignInClient;
     //var user: MutableLiveData<User> = MutableLiveData()
 
-    public MutableLiveData<User> mUserMutableLiveData = new MutableLiveData();
+    public MutableLiveData<UserResponse> mUserMutableLiveData = new MutableLiveData();
 
     public SignupViewModel(@NonNull Application application) {
         super(application);
@@ -121,10 +121,11 @@ public class SignupViewModel extends BaseAndroidViewModel {
             showProgressBar(true);
             mUserRepository.signup(name, email, password, phoneNo, new UserDataSource.RegisterCallback() {
                 @Override
-                public void onRegister(@NotNull User user) {
-                    Log.e("Success",user.toString());
+                public void onRegister(@NotNull UserResponse userResponse) {
+                    Log.e("Success",userResponse.toString());
                     showProgressBar(false);
-                    mUserMutableLiveData.setValue(user);
+                    //showSuccessDialog("","")
+                    mUserMutableLiveData.setValue(userResponse);
                 }
 
                 @Override

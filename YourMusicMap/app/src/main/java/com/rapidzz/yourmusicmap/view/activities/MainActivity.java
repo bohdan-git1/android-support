@@ -1,28 +1,35 @@
 package com.rapidzz.yourmusicmap.view.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,101 +46,100 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.rapidzz.mymusicmap.datamodel.model.fan.Song;
-import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.other.util.SessionManager;
+import com.rapidzz.mymusicmap.view.activities.LandingActivity;
 import com.rapidzz.yourmusicmap.R;
+import com.rapidzz.yourmusicmap.databinding.ActivityMainBinding;
+import com.rapidzz.yourmusicmap.other.util.GeofenceErrorMessages;
+import com.rapidzz.yourmusicmap.other.util.Permission;
 import com.rapidzz.yourmusicmap.other.util.ReplaceFragmentManger;
 import com.rapidzz.yourmusicmap.other.util.RxBus;
+import com.rapidzz.yourmusicmap.view.broadcastReceivers.GeofenceBroadcastReceiver;
 import com.rapidzz.yourmusicmap.view.fragments.MapFragment;
 import com.rapidzz.yourmusicmap.view.fragments.ProfileFragment;
 import com.rapidzz.yourmusicmap.view.fragments.SongsFragment;
-import com.rapidzz.yourmusicmap.view.services.GeofenceTransitionsIntentService;
 import com.rapidzz.yourmusicmap.viewmodel.SongViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import io.reactivex.annotations.NonNull;
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnCompleteListener<Void> {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+    // For Geo-Fencing
+    private GeofencingClient geofencingClient;
+    private PendingIntent geofencePendingIntent = null;
+    private ArrayList<Geofence> geofenceList = new ArrayList<>();
+
+    private ArrayList<Song> mSongs = new ArrayList<>();
 
     LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationClient;
     private SettingsClient mSettingsClient;
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationRequest mLocationRequest;
-    private GeofencingClient geofencingClient;
-    private PendingIntent geofencePendingIntent;
-    private SongViewModel viewModel;
-    private ArrayList<Geofence> geofenceList;
+
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
     private ImageView ivProfile;
     private TextView tvProfileName;
     private TextView tvProfileEmail;
+    public ActivityMainBinding binding;
+
     private Fragment fragment;
     ReplaceFragmentManger replaceFragment = new ReplaceFragmentManger();
 
+    SongViewModel viewModel;
 
+    private void init() {
+        toolbar = findViewById(R.id.toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+
+        ivProfile = headerView.findViewById(R.id.ivProfile);
+        tvProfileName = headerView.findViewById(R.id.tvProfile);
+        tvProfileEmail = headerView.findViewById(R.id.tvProfileEmail);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
+
+    /*private void setupViewModel() {
+        viewModel = ViewModelProviders.of(this).get(SongViewModel.class);
+        viewModelCallbacks(viewModel);
+        viewModel.getSongs(new SessionManager(this).getUserId(), false);
+    }*/
+
+    public void viewModelCallbacks(SongViewModel viewModel) {
+
+        viewModel.mSongListingResponseMutableLiveData.observe(this, songs -> {
+
+            mSongs.clear();
+            mSongs.addAll(songs);
+
+            addGeoFences(mSongs);
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        init();
 
+       // setupViewModel();
 
+        setupNavigation();
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        geofencingClient = LocationServices.getGeofencingClient(this);
-        getGeofencePendingIntent();
-        removeGeofencesListener();
-        geofenceList = new ArrayList<>();
-        viewModel = ViewModelProviders.of(this).get(SongViewModel.class);
-        viewModelCallbacks(viewModel);
-        String id =  new SessionManager(this).getUserId();
-        viewModel.getSongs(id,false);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        updateUI();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
+        addMapFragment();
 
-        ivProfile = (ImageView)headerView.findViewById(R.id.ivProfile);
-        tvProfileName = (TextView) headerView.findViewById(R.id.tvProfile);
-        tvProfileEmail = (TextView) headerView.findViewById(R.id.tvProfileEmail);
-        String firstName =  new SessionManager(this).getFirstName();
-        String lastName =  new SessionManager(this).getLastName();
-        String email =  new SessionManager(this).getEmail();
-        tvProfileName.setText(firstName + " " + lastName);
-        tvProfileEmail.setText(email);
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.closeDrawers();
-
-                fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-                if (fragment != null) {
-                    String fragmentName = fragment.getTag();
-                    String name = ProfileFragment.class.getSimpleName();
-
-                    if (fragmentName == null || !fragmentName.equals(name)) {
-                        replaceFragment.replaceFragment(new ProfileFragment(), ProfileFragment.TAG, null,MainActivity.this);
-                    }
-                }
-
-            }
-        });
-
-
-
-
-        addHomeFragment();
         mSettingsClient = LocationServices.getSettingsClient(this);
 
         // Kick off the process of building the LocationCallback, LocationRequest, and
@@ -141,49 +147,191 @@ public class MainActivity extends AppCompatActivity
         createLocationCallback();
         createLocationRequest();
         buildLocationSettingsRequest();
+
+        setupGeofence();
+    }
+
+    private void setupGeofence() {
+        geofencingClient = LocationServices.getGeofencingClient(this);
+    }
+
+    private void addGeoFences(ArrayList<Song> songs) {
+
+        // removing previously add geofences
+        if (!removeGeofencesListener())
+            return;
+
+        geofenceList = new ArrayList<>();
+
+        for (int i = 0; i < songs.size(); i++) {
+            geofenceList.add(new Geofence.Builder()
+                    // Set the request ID of the geofence. This is a string to identify this
+                    // geofence.
+                    .setRequestId("song_" + songs.get(i).getId())
+
+                    .setCircularRegion(
+                            Double.parseDouble(songs.get(i).getLat()),
+                            Double.parseDouble(songs.get(i).getLng()),
+                            100
+                    )
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+        }
+
+        addGeofencesWithPermission();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void addGeofencesWithPermission() {
+        if (!Permission.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Permission.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            return;
+        }
+        geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                     /*   Toast.makeText(
+                                MainActivity.this, "Added Geofence Success", Toast.LENGTH_SHORT).show();*/
+                    }
+                })
+                .addOnFailureListener(Throwable::printStackTrace)
+                .addOnCompleteListener(this);
+    }
+
+    private boolean removeGeofencesListener() {
+        if (!Permission.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Permission.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            return false;
+        }
+
+        geofencingClient.removeGeofences(getGeofencePendingIntent())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        /*Toast.makeText(
+                                MainActivity.this, "Remove Geofence Success", Toast.LENGTH_SHORT).show();*/
+                    }
+                })
+                .addOnFailureListener(Throwable::printStackTrace)
+                .addOnCompleteListener(this);
+        return true;
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+    public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+        if (task.isSuccessful()) {
+
+            String message = null;
+
+            if (task.getResult() != null)
+                message = task.getResult().toString();
+
+            if (message != null && !message.isEmpty()) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            } else {
+                //Toast.makeText(this, "Geofenct Add/Remove onComplete called", Toast.LENGTH_SHORT).show();
+            }
+
         } else {
-            super.onBackPressed();
+
+            String errorMessage = GeofenceErrorMessages.getErrorString(this, task.getException());
+            Log.e(TAG, errorMessage);
+
         }
     }
 
+    @NotNull
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(geofenceList);
+        return builder.build();
+    }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    private PendingIntent getGeofencePendingIntent() {
+        // Reuse the PendingIntent if we already have it.
+        if (geofencePendingIntent != null) {
+            return geofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofences() and removeGeofences().
+        geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+        return geofencePendingIntent;
+    }
 
-        if (id == R.id.nav_home) {
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        } else if (id == R.id.nav_songs) {
+    private void updateUI() {
+        String firstName = new SessionManager(this).getFirstName();
+        String lastName = new SessionManager(this).getLastName();
+        String email = new SessionManager(this).getEmail();
+        String image = new SessionManager(this).getProfileImage();
+        tvProfileName.setText(firstName + " " + lastName);
+        tvProfileEmail.setText(email);
+
+        if (image.isEmpty()) {
+            Glide.with(getApplicationContext()).load(R.drawable.dp_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+        } else {
+            Glide.with(getApplicationContext()).load(image).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+        }
+
+        ivProfile.setOnClickListener(v -> {
+            drawer.closeDrawers();
+
             fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
             if (fragment != null) {
                 String fragmentName = fragment.getTag();
-                String name = SongsFragment.class.getSimpleName();
+                String name = ProfileFragment.class.getSimpleName();
 
                 if (fragmentName == null || !fragmentName.equals(name)) {
-                    replaceFragment.replaceFragment(new SongsFragment(), SongsFragment.TAG, null, this);
+                    replaceFragment.replaceFragment(new ProfileFragment(), ProfileFragment.TAG, null, MainActivity.this);
                 }
             }
 
-        } else if (id == R.id.nav_logout) {
+        });
+    }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NotNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.nav_home:
+                FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                break;
+            case R.id.nav_songs:
+                fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
+                if (fragment != null) {
+                    String fragmentName = fragment.getTag();
+                    String name = SongsFragment.class.getSimpleName();
+
+                    if (fragmentName == null || !fragmentName.equals(name)) {
+                        replaceFragment.replaceFragment(new SongsFragment(), SongsFragment.TAG, null, this);
+                    }
+                }
+
+                break;
+            case R.id.nav_logout:
+                new SessionManager(this).setUserLoggedIn(false);
+
+                Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+                break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void addHomeFragment() {
+    private void addMapFragment() {
 
         /**
          * Adding HomeFragment
@@ -204,7 +352,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -215,8 +366,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         fusedLocationClient.requestLocationUpdates(mLocationRequest,
-                locationCallback,
-                null /* Looper */);
+                locationCallback, null /* Looper */);
     }
 
     @Override
@@ -254,11 +404,11 @@ public class MainActivity extends AppCompatActivity
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
 
-                Log.e("LOCATION","Its called: " + locationResult.getLastLocation());
+                Log.e("LOCATION", "Its called: " + locationResult.getLastLocation());
                 RxBus.defaultInstance().send(locationResult);
                 //CurrentLocation = locationResult.getLastLocation();
-               // mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-              //  updateLocationUI();
+                // mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                //  updateLocationUI();
             }
         };
     }
@@ -274,79 +424,57 @@ public class MainActivity extends AppCompatActivity
         mLocationSettingsRequest = builder.build();
     }
 
-
-    private void addGeoFences(ArrayList<Song> songs){
-
-        for(int i = 0; i < songs.size();i++) {
-            geofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId("song_" + songs.get(i).getId())
-
-                    .setCircularRegion(
-                            Double.parseDouble(songs.get(i).getLat()),
-                            Double.parseDouble(songs.get(i).getLng()),
-                            100
-                    )
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build());
-        }
-    }
-
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(geofenceList);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
-        if (geofencePendingIntent != null) {
-            return geofencePendingIntent;
-        }
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
-        geofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
-        return geofencePendingIntent;
-    }
-
-    private void removeGeofencesListener(){
-        geofencingClient.removeGeofences(getGeofencePendingIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Geofences removed
-                        // ...
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Failed to remove geofences
-                        // ...
-                    }
-                });
-    }
-
-
-
-    public void viewModelCallbacks(SongViewModel viewModel) {
-
-        viewModel.mSongListingResponseMutableLiveData.observe(this, songArrayList -> {
-
-            addGeoFences(songArrayList);
-
-        });
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
         fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setupNavigation() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 50) {
+            if (mSongs != null && mSongs.size() > 0)
+                addGeoFences(mSongs);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.hasExtra("notificationDetails")) {
+            Log.e(TAG, "onNewIntent: " + intent.getStringExtra("notificationDetails"));
+
+            String songId = intent.getStringExtra("notificationDetails").split(":")[1]
+                    .trim().split(",")[0].split("song_")[1];
+
+            Bundle args = new Bundle();
+            args.putString("type", "playSongFromNotification");
+            args.putString("songId", songId);
+
+            RxBus.defaultInstance().send(args);
+
+        }
     }
 }

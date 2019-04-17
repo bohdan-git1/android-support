@@ -4,12 +4,15 @@
     <color name="colorPrimaryDark">#3a589e</color>
     <color name="colorAccent">#D81B60</color>
     <color name="bg">#e4e4e4</color>
+    <color name="bgColor">#FAFAFA</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="blue">#1d95ed</color>
+    <color name="disable_blue">#88BADD</color>
     <color name="blue_dark">#3a589e</color>
     <color name="red">#d9534f</color>
     <color name="bg_transparent">#99e4e4e4</color>
     <color name="transparent">#00000000</color>
+    <color name="line">#FFC3C2C2</color>
 
 </resources>

@@ -1,7 +1,7 @@
 package com.rapidzz.mymusicmap.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.util.Patterns
 import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.source.UserRepository

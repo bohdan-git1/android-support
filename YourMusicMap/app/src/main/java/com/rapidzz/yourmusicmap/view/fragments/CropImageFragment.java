@@ -1,15 +1,14 @@
 package com.rapidzz.yourmusicmap.view.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +16,12 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.rapidzz.mymusicmap.datamodel.source.UserDataSource;
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory;
 import com.rapidzz.mymusicmap.other.util.SessionManager;
 import com.rapidzz.yourmusicmap.databinding.FragmentCropPhotoBinding;
+import com.rapidzz.yourmusicmap.view.activities.MainActivity;
 import com.rapidzz.yourmusicmap.viewmodel.LoginViewModel;
-import com.rapidzz.yourmusicmap.viewmodel.SongViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -52,7 +50,7 @@ public class CropImageFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ((MainActivity)context).binding.appbar.tvEdit.setVisibility(View.GONE);
         ViewModelFactory factory =
                 ViewModelFactory.Companion.getInstance(getActivity().getApplication());
 
@@ -100,7 +98,7 @@ public class CropImageFragment extends BaseFragment {
     }
 
     public void viewModelCallbacks(LoginViewModel viewModel) {
-        viewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
+        viewModel.getSnackbarMessage().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<String>>() {
             @Override
             public void onChanged(@io.reactivex.annotations.Nullable OneShotEvent<String> stringOneShotEvent) {
                 String msg = stringOneShotEvent.getContentIfNotHandled();
@@ -109,14 +107,14 @@ public class CropImageFragment extends BaseFragment {
             }
         });
 
-        viewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
+        viewModel.getProgressBar().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<Boolean>>() {
             @Override
             public void onChanged(@io.reactivex.annotations.Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
                 showProgressDialog(booleanOneShotEvent.getContentIfNotHandled());
             }
         });
 
-        viewModel.getUser().observe(this, songResponse -> {
+        viewModel.getUser().observe(getViewLifecycleOwner(), songResponse -> {
 
             getFragmentManager().popBackStack();
 //            ((AppCompatActivity)context).getSupportFragmentManager().popBackStack();

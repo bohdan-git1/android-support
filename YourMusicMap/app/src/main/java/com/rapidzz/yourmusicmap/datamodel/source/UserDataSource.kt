@@ -6,8 +6,14 @@ import com.rapidzz.mymusicmap.datamodel.model.responses.*
 
 
 interface UserDataSource{
+
+    interface IsTrackAvailableCallback{
+        fun onResponse(trackAvailable: Boolean, message: String)
+        fun onError(error: String)
+    }
+
     interface RegisterCallback {
-        fun onRegister(user: User)
+        fun onRegister(userResponse: UserResponse)
         fun onPayloadError(error: ApiErrorResponse)
     }
 

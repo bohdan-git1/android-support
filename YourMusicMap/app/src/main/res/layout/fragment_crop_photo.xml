@@ -23,7 +23,7 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button"
+                android:background="@drawable/button_enabled"
                 android:text="Upload"
                 android:id="@+id/btnSubmit"
                 android:textColor="@color/white"

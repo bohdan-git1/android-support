@@ -22,12 +22,12 @@
             android:text="I Don't Wana Miss A Thing"
             android:gravity="center"
             android:id="@+id/tvSong"
-            android:maxLines="1"
             android:paddingRight="15dp"
             android:paddingLeft="15dp"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:singleLine="true"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,17 +71,20 @@
                 android:layout_height="30dp"
                 android:layout_weight="0.25"
                 android:layout_marginLeft="20dp"
+                android:id="@+id/ivPreviousSong"
                 android:src="@drawable/ic_fast_rewind_black_24dp"/>
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_weight="0.25"
+                android:id="@+id/ivShuffle"
                 android:src="@drawable/ic_shuffle_black_24dp"/>
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_weight="0.25"
-                android:src="@drawable/ic_repeat_black_24dp"/>
+                android:id="@+id/ivRepeat"
+                android:src="@drawable/ic_repeat_one_black_24dp"/>
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -93,8 +96,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button"
+            android:background="@drawable/button_enabled"
             android:text="Pin to Map"
+            android:visibility="gone"
             android:id="@+id/btPinToMap"
             android:textColor="@color/white"
             android:layout_marginLeft="80dp"
@@ -103,8 +107,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button"
+            android:background="@drawable/button_enabled"
             android:text="Set Song"
+            android:visibility="gone"
             android:id="@+id/btnSetSong"
             android:textColor="@color/white"
             android:layout_marginLeft="80dp"

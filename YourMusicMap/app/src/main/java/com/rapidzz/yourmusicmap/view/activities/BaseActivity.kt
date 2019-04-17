@@ -3,9 +3,9 @@ package com.rapidzz.mymusicmap.view.activities
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
 import com.rapidzz.mymusicmap.other.util.SessionManager
 import com.rapidzz.yourmusicmap.R
 import com.rapidzz.yourmusicmap.view.dialog.AlertMessageDialog
@@ -53,9 +53,9 @@ open class BaseActivity : AppCompatActivity() {
         supportFragmentManager.popBackStack()
     }
 
-    fun replaceFragment(fragment: Fragment, tag: String, addToStack: Boolean, clearStack: Boolean){
+    fun replaceFragment(fragment: androidx.fragment.app.Fragment, tag: String, addToStack: Boolean, clearStack: Boolean){
         if(clearStack)
-            supportFragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         var ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.main_container,fragment,tag)
         if(addToStack)

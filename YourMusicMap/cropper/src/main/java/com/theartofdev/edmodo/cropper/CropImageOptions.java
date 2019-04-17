@@ -216,7 +216,7 @@ public class CropImageOptions implements Parcelable {
   /** whether the image should be flipped vertically */
   public boolean flipVertically;
 
-  /** optional, the text of the crop menu crop button */
+  /** optional, the text of the crop menu crop button_enabled */
   public CharSequence cropMenuCropButtonTitle;
 
   /** optional image resource to be used for crop menu crop icon instead of text */

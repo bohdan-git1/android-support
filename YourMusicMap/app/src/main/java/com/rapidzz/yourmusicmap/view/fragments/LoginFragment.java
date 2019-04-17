@@ -1,32 +1,33 @@
 package com.rapidzz.yourmusicmap.view.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.rapidzz.mymusicmap.datamodel.model.fan.User;
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent;
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory;
 import com.rapidzz.mymusicmap.other.util.SessionManager;
-import com.rapidzz.mymusicmap.view.activities.GlobalNavigationActivity;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentLoginBinding;
+import com.rapidzz.yourmusicmap.other.util.Permission;
 import com.rapidzz.yourmusicmap.other.util.ReplaceFragmentManger;
 import com.rapidzz.yourmusicmap.view.activities.MainActivity;
 import com.rapidzz.yourmusicmap.viewmodel.LoginViewModel;
-import com.rapidzz.yourmusicmap.viewmodel.SignupViewModel;
 
-public class LoginFragment extends BaseFragment implements View.OnClickListener{
+public class LoginFragment extends BaseFragment implements View.OnClickListener {
     public static final String TAG = LoginFragment.class.getSimpleName();
     private Context context;
     FragmentLoginBinding binding;
@@ -43,9 +44,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         replaceFragment = new ReplaceFragmentManger();
+
+        requestFineLocationPermissions();
     }
 
-    public void init(){
+    private void requestFineLocationPermissions() {
+        if (!Permission.isPermissionGranted(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Permission.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    public void init() {
         ViewModelFactory factory =
                 ViewModelFactory.Companion.getInstance(getActivity().getApplication());
 
@@ -69,51 +78,64 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.llCreateAccount:
-                replaceFragment.replaceFragment(new SignupFragment(),SignupFragment.TAG,null,context);
+                replaceFragment.replaceFragment(new SignupFragment(), SignupFragment.TAG, null, context);
                 break;
             case R.id.btLogin:
 
                 hideKeyboard();
                 loginViewModel.login(binding.etEmail.getText().toString()
-                        ,binding.etPassword.getText().toString());
+                        , binding.etPassword.getText().toString());
                 //replaceFragment.replaceFragment(new MapFragment(),MapFragment.TAG,null,context);
                 break;
         }
     }
 
-    public void viewModelCallbacks(LoginViewModel viewModel){
-        viewModel.getSnackbarMessage().observe(this, new Observer<OneShotEvent<String>>() {
+    public void viewModelCallbacks(LoginViewModel viewModel) {
+        viewModel.getSnackbarMessage().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<String>>() {
             @Override
             public void onChanged(@Nullable OneShotEvent<String> stringOneShotEvent) {
                 String msg = stringOneShotEvent.getContentIfNotHandled();
-                showAlertDialog(msg);
+                if (msg != null)
+                    showAlertDialog(msg);
 
             }
         });
 
-        viewModel.getProgressBar().observe(this, new Observer<OneShotEvent<Boolean>>() {
+        viewModel.getProgressBar().observe(getViewLifecycleOwner(), new Observer<OneShotEvent<Boolean>>() {
             @Override
             public void onChanged(@Nullable OneShotEvent<Boolean> booleanOneShotEvent) {
-                showProgressDialog(false);
+                Boolean flag = booleanOneShotEvent.getContentIfNotHandled();
+                if(flag != null)
+                showProgressDialog(flag);
             }
         });
 
-        viewModel.getUser().observe(this, user -> {
+        viewModel.getUser().observe(getViewLifecycleOwner(), user -> {
 
-            Log.e("Response",""+user.getName());
+            Log.e("Response", "" + user.getImage());
 
             new SessionManager(getActivity()).setUserLoggedIn(true);
             new SessionManager(getActivity()).setUser(user);
             startActivity(new Intent(getActivity(), MainActivity.class));
-           });
+        });
     }
 
-    public void hideKeyboard(){
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 50) {
+            requestFineLocationPermissions();
+        }
+    }
+
+    public void hideKeyboard() {
         View view = getActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }

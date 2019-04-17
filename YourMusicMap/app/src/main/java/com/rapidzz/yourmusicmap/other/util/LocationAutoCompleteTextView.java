@@ -1,7 +1,7 @@
 package com.rapidzz.yourmusicmap.other.util;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import android.util.AttributeSet;
 
 public class LocationAutoCompleteTextView extends AppCompatAutoCompleteTextView {

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/layouttop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:id="@+id/txtOrgTitle"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:paddingLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:text="Change Song"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:layout_below="@id/layouttop"/>
+
+    <WebView
+    android:id="@+id/givewebview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:layout_below="@id/progress_bar">
+
+
+</WebView>
+
+</RelativeLayout>

@@ -2,9 +2,9 @@ package com.rapidzz.yourmusicmap.view.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.rapidzz.mymusicmap.other.util.SessionManager;
 import com.rapidzz.yourmusicmap.R;
 import com.rapidzz.yourmusicmap.databinding.FragmentProfileBinding;
 import com.rapidzz.yourmusicmap.other.util.ReplaceFragmentManger;
+import com.rapidzz.yourmusicmap.view.activities.MainActivity;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -47,15 +48,32 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 //        ((MainActivity)context).binding.contentMain.rlToolbarMain.setVisibility(View.GONE);
 
+        binding.ivProfile.setEnabled(false);
+        binding.etMobileNo.setEnabled(false);
+        binding.etEmail.setEnabled(false);
+        binding.etName.setEnabled(false);
+        binding.btnUpdateProfile.setEnabled(false);
+
+        ((MainActivity)context).binding.appbar.tvEdit.setVisibility(View.VISIBLE);
+
+        ((MainActivity)context).binding.appbar.tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)context).binding.appbar.tvEdit.setVisibility(View.GONE);
+                binding.ivProfile.setEnabled(true);
+                binding.etMobileNo.setEnabled(true);
+                binding.etEmail.setEnabled(true);
+                binding.etName.setEnabled(true);
+                binding.btnUpdateProfile.setEnabled(true);
+            }
+        });
+
+
         ///////////////////////click events////////////////////////////
         binding.ivProfile.setOnClickListener(this);
 
         String firstName =  new SessionManager(context).getFirstName();
         String lastName =  new SessionManager(context).getLastName();
-
-
-        Log.e("Image",String.valueOf(CropImageFragment.resultUri));
-
         binding.etName.setText(firstName + " " + lastName);
         binding.etEmail.setText(new SessionManager(context).getEmail());
         binding.etMobileNo.setText(new SessionManager(context).getPhone());

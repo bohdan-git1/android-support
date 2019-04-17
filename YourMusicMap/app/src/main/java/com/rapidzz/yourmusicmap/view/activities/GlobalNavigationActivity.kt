@@ -1,6 +1,6 @@
 package com.rapidzz.mymusicmap.view.activities
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,8 +8,8 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.os.PersistableBundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.media.session.MediaButtonReceiver.handleIntent
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.media.session.MediaButtonReceiver.handleIntent
 import android.util.Log
 import android.view.View
 import com.google.common.eventbus.Subscribe

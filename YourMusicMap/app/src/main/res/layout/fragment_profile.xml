@@ -13,13 +13,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/TextViewToobarStyle"
+            <Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="Profile" />
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <TextView
+                    style="@style/TextViewToobarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Profile" />
+            </Toolbar>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -109,7 +114,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="18dp"
                     android:background="@drawable/textview_background"
                     android:padding="5dp"
                     android:id="@+id/etEmail"
@@ -121,16 +126,14 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button"
-                android:text="submit"
+                android:background="@drawable/button_enabled"
+                android:text="Update"
                 android:textColor="@color/white"
                 android:textSize="16sp"
+                android:id="@+id/btnUpdateProfile"
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="80dp"
                 android:layout_marginTop="60dp"/>
-
-
-
         </LinearLayout>
     </ScrollView>
 </layout>

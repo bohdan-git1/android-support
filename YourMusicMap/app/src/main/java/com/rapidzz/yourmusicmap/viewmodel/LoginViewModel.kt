@@ -1,8 +1,8 @@
 package com.rapidzz.yourmusicmap.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.util.Patterns
 import com.rapidzz.mymusicmap.datamodel.model.fan.User
 import com.rapidzz.mymusicmap.datamodel.model.responses.ApiErrorResponse
@@ -33,7 +33,7 @@ class LoginViewModel(context: Application, private val userRepository: UserRepos
                 userRepository.login(email,password, object : UserDataSource.LoginCallback {
                     override fun onLogin(user: User) {
                         showProgressBar(false)
-                        mUser.value = user;
+                        mUser.value = user
                     }
 
                     override fun onPayloadError(error: ApiErrorResponse) {

@@ -16,6 +16,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageView
+                android:id="@+id/ivCurrentLoc"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_gps_white"/>
+
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -56,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
-            android:layout_marginRight="60dp"
-            android:layout_marginLeft="60dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:id="@+id/etSongUrl"
@@ -80,10 +89,9 @@
                 android:layout_height="wrap_content"
                 style="@style/TextViewStyle"
                 android:text="set song"
-                android:textSize="14sp"
                 android:layout_below="@id/etSongUrl"
                 android:textColor="@color/white"
-                android:background="@drawable/button"/>
+                android:background="@drawable/button_enabled"/>
             <Button
                 android:id="@+id/btnSongListing"
                 android:layout_width="match_parent"
@@ -92,10 +100,9 @@
                 android:text="Song Listing"
                 android:layout_below="@id/btnSetSong"
                 android:layout_marginTop="8dp"
-                android:textSize="14sp"
                 android:textColor="@color/white"
                 android:visibility="visible"
-                android:background="@drawable/button"/>
+                android:background="@drawable/button_song_listing"/>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

@@ -3,16 +3,17 @@ package com.rapidzz.yourmusicmap.view.fragments
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.rapidzz.mymusicmap.other.util.SessionManager
 import com.rapidzz.yourmusicmap.R
 import com.rapidzz.yourmusicmap.view.dialog.AlertMessageDialog
+import com.rapidzz.yourmusicmap.view.dialog.SuccessMessageDialog
 import dmax.dialog.SpotsDialog
 
-open class BaseFragment: Fragment(){
+open class BaseFragment: androidx.fragment.app.Fragment(){
 
     lateinit var dialog: AlertDialog
     lateinit var sessionManager: SessionManager
@@ -92,6 +93,10 @@ open class BaseFragment: Fragment(){
 
     fun showAlertDialog(msg: String){
         AlertMessageDialog.newInstance(msg).show(childFragmentManager, AlertMessageDialog.TAG)
+    }
+
+    fun showSuccessDialog(msg: String, call: String){
+        SuccessMessageDialog.newInstance(msg,call).show(childFragmentManager, SuccessMessageDialog.TAG)
     }
 
     fun onBackPress(){

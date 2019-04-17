@@ -12,6 +12,9 @@ import java.util.*
 
 interface ApiService {
 
+    @POST("is_track_available")
+    fun isTrackAvailable(@Body body: HashMap<String, String>): Call<IsTrackAvailableResponse>
+
     @POST("signup")
     fun register(@Body body: HashMap<String, String>): retrofit2.Call<UserResponse>
 
@@ -25,15 +28,30 @@ interface ApiService {
     fun getSongListing(@Body body: HashMap<String, String>): Call<SongListingResponse>
 
     @Multipart
-    @POST("fans/{id}/media")
+    @POST("update_image")
     fun uploadMedia(
-            @Path("id") fanId: String,
+            @Part("id") fanId: String,
             @Part file: MultipartBody.Part
             //@Part("file") file: RequestBody
     ): Call<User>
 
 
+    @Multipart
+    @POST("add_song_on_location")
+    fun addSong(
+            @Part("title") title: String,
+            @Part("path") path: String,
+            @Part("user_id") user_id: Int,
+            @Part("lat") lat: Double,
+            @Part("lng") lng: Double,
+            @Part file: MultipartBody.Part
+            //@Part("file") file: RequestBody
+    ): Call<SongResponse>
+
+
     @GET
     fun getPlacePredictions(@Url url: String): Call<PlacesAutoComplete>
+
+
 
 }

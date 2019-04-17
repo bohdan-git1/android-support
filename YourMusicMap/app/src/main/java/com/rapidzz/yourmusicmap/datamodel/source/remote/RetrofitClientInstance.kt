@@ -18,7 +18,8 @@ class RetrofitClientInstance (ctx: Context){
     private var retrofit: Retrofit? = null
 
     // Its my local path, so will not work on your device
-    private val BASE_URL = "http://192.168.100.14:8000/api/"
+    private val BASE_URL = "http://mashghol.com/yourmusicmap/public/api/"
+    //private val BASE_URL = "http://yourmusicmap.com/api/"
     private val httpClient = OkHttpClient.Builder()
     var context: Context
 

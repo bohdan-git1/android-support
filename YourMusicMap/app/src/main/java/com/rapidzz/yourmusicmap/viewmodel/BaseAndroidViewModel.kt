@@ -1,17 +1,15 @@
 package com.rapidzz.yourmusicmap.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import com.rapidzz.mymusicmap.other.extensions.OneShotEvent
 
 
 open class BaseAndroidViewModel(context: Application) : AndroidViewModel(context) {
 
-    init {
-
-    }
+    init {}
 
     val snackbarMessage = MutableLiveData<OneShotEvent<String>>()
     val progressBar = MutableLiveData<OneShotEvent<Boolean>>()

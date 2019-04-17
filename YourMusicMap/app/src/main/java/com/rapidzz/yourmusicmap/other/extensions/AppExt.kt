@@ -4,18 +4,18 @@ package com.rapidzz.mymusicmap.other.extensions
  */
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import com.rapidzz.mymusicmap.other.factory.ViewModelFactory
 import com.rapidzz.mymusicmap.view.activities.GlobalNavigationActivity
 import com.rapidzz.mymusicmap.view.activities.LandingActivity
@@ -26,9 +26,9 @@ import com.rapidzz.yourmusicmap.view.activities.MainActivity
  * The `fragment` is added to the container view with id `frameId`. The operation is
  * performed by the `fragmentManager`.
  */
-fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int,clearStack: Boolean,addToBackstack: Boolean) {
+fun AppCompatActivity.replaceFragmentInActivity(fragment: androidx.fragment.app.Fragment, frameId: Int, clearStack: Boolean, addToBackstack: Boolean) {
     if(clearStack)
-        supportFragmentManager.popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(0, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
     supportFragmentManager.transact {
         replace(frameId, fragment)
         if(addToBackstack)
@@ -36,9 +36,9 @@ fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int
     }
 }
 
-fun FragmentActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int,clearStack: Boolean,addToBackstack: Boolean) {
+fun androidx.fragment.app.FragmentActivity.replaceFragmentInActivity(fragment: androidx.fragment.app.Fragment, frameId: Int, clearStack: Boolean, addToBackstack: Boolean) {
     if(clearStack)
-        supportFragmentManager.popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(0, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
     supportFragmentManager.transact {
         replace(frameId, fragment)
         if(addToBackstack)
@@ -59,7 +59,7 @@ fun Activity.gotoLandingActivity() {
     finish()
 }
 
-fun FragmentActivity.gotoLandingActivity() {
+fun androidx.fragment.app.FragmentActivity.gotoLandingActivity() {
     val intent  = Intent(this,LandingActivity::class.java)
     startActivity(intent)
     finish()
@@ -76,7 +76,7 @@ fun AppCompatActivity.gotoLandingActivity() {
  * The `fragment` is added to the container view with tag. The operation is
  * performed by the `fragmentManager`.
  */
-fun AppCompatActivity.addFragmentToActivity(fragment: Fragment, tag: String) {
+fun AppCompatActivity.addFragmentToActivity(fragment: androidx.fragment.app.Fragment, tag: String) {
     supportFragmentManager.transact {
         add(fragment, tag)
     }
@@ -92,17 +92,17 @@ fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: ActionBar.()
 fun <T : ViewModel> AppCompatActivity.obtainViewModel(viewModelClass: Class<T>) =
         ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
 
-fun <T : ViewModel> FragmentActivity.obtainViewModel(viewModelClass: Class<T>) =
+fun <T : ViewModel> androidx.fragment.app.FragmentActivity.obtainViewModel(viewModelClass: Class<T>) =
         ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
 
-fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>) =
+fun <T : ViewModel> androidx.fragment.app.Fragment.obtainViewModel(viewModelClass: Class<T>) =
     ViewModelProviders.of(this, ViewModelFactory.getInstance(this.activity?.application!!)).get(viewModelClass)
 
 
 /**
  * Runs a FragmentTransaction, then calls commit().
  */
-private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
+private inline fun androidx.fragment.app.FragmentManager.transact(action: androidx.fragment.app.FragmentTransaction.() -> Unit) {
     beginTransaction().apply {
         action()
     }.commit()

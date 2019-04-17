@@ -4,18 +4,23 @@
 
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!--Paypal-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_app_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_app_logo"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity
             android:name="com.rapidzz.mymusicmap.view.activities.LandingActivity"
@@ -36,8 +41,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDMQb4ftu7yt1xHCIUB95qziVC1Xbqfxz8"></meta-data>
-           <!-- android:value="@string/google_maps_key" /> -->
+            android:value="AIzaSyDMQb4ftu7yt1xHCIUB95qziVC1Xbqfxz8"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -65,8 +69,59 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-        <service android:name=".view.services.GeofenceTransitionsIntentService"/>
+        <receiver android:name=".view.broadcastReceivers.GeofenceBroadcastReceiver"
+                  android:enabled="true"
+                  android:exported="true"/>
 
+        <service android:name=".view.services.GeofenceTransitionsIntentService"
+                 android:exported="true"
+                 android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <!--Paypal -->
+
+        <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="mashghol.com"
+                    android:path="/yourmusicmap"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.paypal.pyplcheckout.PYPLCheckoutReceiver"
+                  android:launchMode="singleTask"
+            >
+            <intent-filter android:autoVerify="true">
+
+                <data
+                    android:scheme="yourmusicmap"
+                    android:host="paypalxo" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+            </intent-filter>
+        </activity>
+        <!--<service android:name=".view.services.GeofenceTransitionsIntentService"/>-->
+
+        <activity android:name=".view.activities.PaypalWebView"></activity>
+
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" ></action>
+                <category android:name="android.intent.category.DEFAULT" ></category>
+                <category android:name="android.intent.category.BROWSABLE" ></category>
+                <data android:scheme="${applicationId}.braintree" ></data>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

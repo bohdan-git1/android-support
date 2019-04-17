@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/blue" />
-    <corners android:radius="10dp" />
-
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/button_enabled" android:state_enabled="true"/>
+    <item android:state_enabled="false" android:drawable="@drawable/button_disabled"/>
+    <item android:drawable="@drawable/button_enabled"/>
+</selector>
