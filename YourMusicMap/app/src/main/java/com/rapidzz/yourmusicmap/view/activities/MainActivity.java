@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -56,10 +57,7 @@ import com.rapidzz.yourmusicmap.other.util.Permission;
 import com.rapidzz.yourmusicmap.other.util.ReplaceFragmentManger;
 import com.rapidzz.yourmusicmap.other.util.RxBus;
 import com.rapidzz.yourmusicmap.view.broadcastReceivers.GeofenceBroadcastReceiver;
-import com.rapidzz.yourmusicmap.view.fragments.MapFragment;
 import com.rapidzz.yourmusicmap.view.fragments.ProfileFragment;
-import com.rapidzz.yourmusicmap.view.fragments.SongsFragment;
-import com.rapidzz.yourmusicmap.viewmodel.SongViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
